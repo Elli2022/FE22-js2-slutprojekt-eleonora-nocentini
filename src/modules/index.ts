@@ -11,7 +11,13 @@ async function getUsers(): Promise<User[]> {
     try {
         console.log("Fetching users...");
         const response = await fetch(baseUrl + "users.json");
-        const users: Record<string, User> = await response.json();
+        const users: Record<string, User> | null = await response.json();
+
+        if (!users) {
+            console.log("No users found.");
+            return [];
+        }
+
         console.log(users);
         const usersArray: User[] = Object.values(users);
         let newOrOldUsers: User[] = usersArray.filter(user => user.is_new_user);
@@ -37,6 +43,18 @@ function createUser(name: string, password: string): User {
     };
 }
 
+//Button to create a new account for new users
+const createAccountButton = document.getElementById("create-account-button");
+createAccountButton.addEventListener("click", async () => {
+    const name = document.getElementById("userName").value;
+    const password = document.getElementById("password").value;
+    const newUser = createUser(name, password);
+    const users = await getUsers();
+    users.push(newUser);
+    await saveUsers(users);
+});
+
+
 // Submit button for old users to login
 const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
 submitButton.addEventListener('click', async function (event: MouseEvent) {
@@ -57,4 +75,17 @@ submitButton.addEventListener('click', async function (event: MouseEvent) {
     localStorage.setItem('users', JSON.stringify(usersArray));
     window.location.href = "index.html";
 });
+
+
+//update the user object in the database
+async function updateUser(objectToUpdate: User): Promise<void> {
+    console.log(objectToUpdate);
+    const users = await getUsers();
+    const usersArray = users.map(user => user);
+    const index = usersArray.findIndex(user => user.id === objectToUpdate.id);
+    usersArray[index] = objectToUpdate;
+    localStorage.setItem('users', JSON.stringify(usersArray));
+    window.location.href = "index.html";
+    return;
+}
 
