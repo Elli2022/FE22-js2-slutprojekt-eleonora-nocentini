@@ -23,17 +23,20 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <br>
-            <div class="image-selection">
-                <label>Select an image:</label>
-                <div class="scroll-container">
-                    <img src="/src/images/userImage 1.png" alt="Image 1">
-                    <img src="/src/images/userImage 2.png" alt="Image 2">
-                    <img src="/src/images/userImage 3.png" alt="Image 3">
-                </div>
-            </div>
             <button type="submit" id="submit-button">Login</button>
-            <button type="createAccount" id="create-account-button">Create Account</button>
-            <button type="button" id="confirm-password-button">Confirm Password</button>
+            <button type="button" id="create-account-button">Create Account</button>
+        </form>
+        <h2>Create Account</h2>
+        <form>
+            <label for="create-account-password">Password:</label>
+            <input type="password" id="create-account-password" name="create-account-password" required>
+            <br>
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" required>
+            <br>
+            <label for="image-url">Image URL:</label>
+            <input type="text" id="image-url" name="image-url" required>
+            <br>
         </form>
     </section>
     <footer>
@@ -43,5 +46,6 @@
         </div>
     </footer>
 </body>
+
 
 </html>
