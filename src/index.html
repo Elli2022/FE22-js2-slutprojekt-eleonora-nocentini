@@ -14,8 +14,6 @@
     <header>
         <h1>Social Media</h1>
     </header>
-    <main>
-        <main>
             <section id="login">
                 <h2>Login</h2>
                 <form>
@@ -25,11 +23,22 @@
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                     <br>
-                    <button type="submit">Login</button>
+                    <div class="image-selection">
+                        <label>Select an image:</label>
+                        <div class="scroll-container">
+                            <img src="/src/images/userImage 1.png" alt="Image 1">
+                            <img src="/src/images/userImage 2.png" alt="Image 2">
+                            <img src="/src/images/userImage 3.png" alt="Image 3">
+                        </div>
+                    </div>
+                    <button type="submit" id="submit-button">Login</button>
+                    <button type="createAccount">Create Account</button>
                 </form>
             </section>
         <footer>
-            <!-- Add your footer content here -->
+            <div class="social-media-icons">
+            <p class="copyright">© 2023 Social Media. All rights reserved.</p>
+        </div>
         </footer>
 </body>
 
