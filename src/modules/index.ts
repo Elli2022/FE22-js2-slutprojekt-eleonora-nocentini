@@ -27,6 +27,15 @@ async function getUsers(): Promise<User[]> {
 
 getUsers();
 
+// Function to create a new user object
+function createUser(name: string, password: string): User {
+    return {
+        id: "", // You might want to generate a unique ID here
+        name,
+        is_new_user: true, // Assuming new users have this property set to true
+        // Add any other properties that users have in your data and set their values
+    };
+}
 
 // Submit button for old users to login
 const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
@@ -35,16 +44,17 @@ submitButton.addEventListener('click', async function (event: MouseEvent) {
     const userName = (document.getElementById('username') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
     const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
-    
+
     if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
     }
-    
-    const user = new User(userName, password);
+
+    const user = createUser(userName, password);
     const users = await getUsers();
     users.push(user);
     const usersArray = users.map(user => user);
     localStorage.setItem('users', JSON.stringify(usersArray));
     window.location.href = "index.html";
 });
+
