@@ -31,28 +31,45 @@ async function getUsers(): Promise<User[]> {
     }
 }
 
+// Function to save users to the database
+async function saveUsers(users: User[]): Promise<void> {
+    await fetch(baseUrl + "users.json", {
+        method: "PUT",
+        body: JSON.stringify(users),
+    });
+}
+
 getUsers();
 
-// Function to create a new user object
 function createUser(name: string, password: string): User {
+    const id = generateUniqueId();
     return {
-        id: "", // You might want to generate a unique ID here
+        id,
         name,
-        is_new_user: true, // Assuming new users have this property set to true
-        // Add any other properties that users have in your data and set their values
+        is_new_user: true,
     };
+}
+
+function generateUniqueId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
 
 //Button to create a new account for new users
 const createAccountButton = document.getElementById("create-account-button");
-createAccountButton.addEventListener("click", async () => {
-    const name = document.getElementById("userName").value;
-    const password = document.getElementById("password").value;
-    const newUser = createUser(name, password);
-    const users = await getUsers();
-    users.push(newUser);
-    await saveUsers(users);
-});
+if (createAccountButton) {
+    createAccountButton.addEventListener("click", async () => {
+        const name = (document.getElementById("username") as HTMLInputElement).value;
+        const password = (document.getElementById("create-account-password") as HTMLInputElement).value;
+        const newUser = createUser(name, password);
+        const users = await getUsers();
+        users.push(newUser);
+        await saveUsers(users);
+    });
+} else {
+    console.error("Create account button not found");
+}
+
+
 
 
 // Submit button for old users to login
@@ -63,6 +80,8 @@ submitButton.addEventListener('click', async function (event: MouseEvent) {
     const password = (document.getElementById('password') as HTMLInputElement).value;
     const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
 
+
+
     if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
@@ -71,21 +90,19 @@ submitButton.addEventListener('click', async function (event: MouseEvent) {
     const user = createUser(userName, password);
     const users = await getUsers();
     users.push(user);
-    const usersArray = users.map(user => user);
-    localStorage.setItem('users', JSON.stringify(usersArray));
+    await saveUsers(users);
     window.location.href = "index.html";
 });
 
-
 //update the user object in the database
 async function updateUser(objectToUpdate: User): Promise<void> {
-    console.log(objectToUpdate);
-    const users = await getUsers();
-    const usersArray = users.map(user => user);
-    const index = usersArray.findIndex(user => user.id === objectToUpdate.id);
-    usersArray[index] = objectToUpdate;
-    localStorage.setItem('users', JSON.stringify(usersArray));
-    window.location.href = "index.html";
-    return;
+console.log(objectToUpdate);
+const users = await getUsers();
+const index = users.findIndex(user => user.id === objectToUpdate.id);
+users[index] = objectToUpdate;
+await saveUsers(users);
+window.location.href = "index.html";
+return;
 }
+
 
