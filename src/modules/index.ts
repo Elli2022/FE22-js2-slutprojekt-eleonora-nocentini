@@ -28,21 +28,23 @@ async function getUsers(): Promise<User[]> {
 getUsers();
 
 
-//Submit button for old users to login
-const submitButton=document.getElementById('submit-button');
-submitButton.addEventListener('click',async function(event){
+// Submit button for old users to login
+const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+submitButton.addEventListener('click', async function (event: MouseEvent) {
     event.preventDefault();
-    const userName=document.getElementById('username').value;
-    const password=document.getElementById('password').value;
-    const confirmPassword=document.getElementById('confirm-password').value;
-    if(password!==confirmPassword){
+    const userName = (document.getElementById('username') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
+    
+    if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
     }
-    const user=new User(userName,password);
-    const users=await getUsers();
+    
+    const user = new User(userName, password);
+    const users = await getUsers();
     users.push(user);
-    const usersArray=users.map(users);
-    localStorage.setItem('users',JSON.stringify(usersArray));
-    window.location.href="index.html";
+    const usersArray = users.map(user => user);
+    localStorage.setItem('users', JSON.stringify(usersArray));
+    window.location.href = "index.html";
 });
