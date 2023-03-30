@@ -1,9 +1,12 @@
 // Get the DOM elements
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
-const createAccountPasswordInput = document.getElementById("create-account-password") as HTMLInputElement | null;
+const PasswordInput = document.getElementById("password") as HTMLInputElement | null;
 const statusInput = document.getElementById("status") as HTMLInputElement | null;
 const imageUrlInput = document.getElementById("image-url") as HTMLInputElement | null;
+const userNameInput = document.getElementById("user-name") as HTMLInputElement | null;
+const passwordInput = document.getElementById("password") as HTMLInputElement | null;
+const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
 
 
 interface UserInfo {
@@ -49,10 +52,10 @@ async function getUsers(): Promise<UserInfo[]> {
 
 //uppdate the users array
 async function saveUser(user: UserInfo): Promise<void> {
-    console.log("Saving user...");
+    console.log("Saving user");
     const arrData = await getUsers();
     console.log(arrData);
-;
+    ;
 
     const url = `${baseUrl}users/${user.userName}.json`;
     const init = {
@@ -78,11 +81,11 @@ async function saveUser(user: UserInfo): Promise<void> {
 
 
 // Event listener for the "create account" button
-if (createAccountButton && usernameInput && createAccountPasswordInput && statusInput && imageUrlInput) {
+if (createAccountButton && usernameInput && PasswordInput && statusInput && imageUrlInput) {
     createAccountButton.addEventListener("click", async () => {
         const userInfo: UserInfo = {
             userName: usernameInput.value,
-            password: createAccountPasswordInput.value,
+            password: PasswordInput.value,
             status: statusInput.value,
             imageurl: imageUrlInput.value,
             newUser: true,
@@ -99,9 +102,6 @@ const submitButton = document.getElementById("submit-button") as HTMLButtonEleme
 if (submitButton && usernameInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
-
-        const passwordInput = document.getElementById("password") as HTMLInputElement | null;
-        const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
 
         if (!passwordInput || !confirmPasswordInput) {
             console.error("One or more DOM elements not found.");
