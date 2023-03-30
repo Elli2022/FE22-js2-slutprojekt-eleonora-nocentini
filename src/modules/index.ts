@@ -1,5 +1,6 @@
 // Get the DOM elements
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
+const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
 const PasswordInput = document.getElementById("password") as HTMLInputElement | null;
 const statusInput = document.getElementById("status") as HTMLInputElement | null;
@@ -79,56 +80,66 @@ async function saveUser(user: UserInfo): Promise<void> {
 }
 
 
-
 // Event listener for the "create account" button
-if (createAccountButton && usernameInput && PasswordInput && statusInput && imageUrlInput) {
-    createAccountButton.addEventListener("click", async () => {
-        const userInfo: UserInfo = {
-            userName: usernameInput.value,
-            password: PasswordInput.value,
-            status: statusInput.value,
-            imageurl: imageUrlInput.value,
-            newUser: true,
-        };
+if (createAccountButton && usernameInput && passwordInput && statusInput && imageUrlInput) {
+  createAccountButton.addEventListener("click", async () => {
+    const userName = usernameInput.value;
+    const isAvailable = await isUsernameAvailable(userName);
 
-        await saveUser(userInfo);
-    });
+    if (!isAvailable) {
+      const errorMessage = document.createElement("p");
+      errorMessage.textContent = "Username is already taken. Please choose another one.";
+      errorMessage.style.color = "red";
+      createAccountButton.insertAdjacentElement("afterend", errorMessage);
+      return;
+    }
+
+    const userInfo: UserInfo = {
+      userName: userName,
+      password: passwordInput.value,
+      status: statusInput.value,
+      imageurl: imageUrlInput.value,
+      newUser: true,
+    };
+
+    await saveUser(userInfo);
+  });
 } else {
-    console.error("One or more DOM elements not found.");
+  console.error("One or more DOM elements not found.");
 }
 
-// Event listener for the "submit" button
-const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
+async function isUsernameAvailable(username: string): Promise<boolean> {
+  const users = await getUsers();
+  return !users.some((user) => user.userName === username);
+}
+
+
+// Event listener for the "Login" button
+
 if (submitButton && usernameInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
 
-        if (!passwordInput || !confirmPasswordInput) {
-            console.error("One or more DOM elements not found.");
+        if (!passwordInput) {
+            console.error("Wrong password");
             return;
         }
 
         const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-        }
-
         const users = await getUsers();
         const user = users.find((u) => u.userName === usernameInput.value);
 
-
         if (!user) {
-            alert("User not found");
+            const errorMessage = document.createElement("p");
+            errorMessage.textContent = "No account found for this user. Please create an account first.";
+            errorMessage.style.color = "red";
+            submitButton.insertAdjacentElement("afterend", errorMessage);
             return;
         }
 
         user.newUser = false;
         await saveUser(user);
-        window.location.href = "index.html";
-
+        window.location.href = "successLogin.html"; // replace "new-page.html" with the name of the page you want to redirect to
     });
 } else {
     console.error("One or more DOM elements not found.");
