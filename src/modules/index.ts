@@ -8,7 +8,9 @@ const passwordInput = document.getElementById("password") as HTMLInputElement | 
 const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
 const form = document.getElementById('form') as HTMLFormElement | null;
 const errorMessage = document.createElement("p");
-errorMessage.id = "error-message";
+const deleteButton = document.getElementById('delete-account-button');
+const userDeletedSuccessfully = document.createElement('h1');
+const failedToDeleteUser = document.createElement('h1');
 
 
 interface UserInfo {
@@ -86,7 +88,8 @@ async function saveUser(user: UserInfo): Promise<void> {
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput && statusInput && imageUrlInput) {
     createAccountButton.addEventListener("click", async () => {
-        errorMessage.textContent = " ";
+        userDeletedSuccessfully.textContent = " "
+        errorMessage.innerText = " ";
         const userName = usernameInput.value;
         const isAvailable = await isUsernameAvailable(userName);
         if (!isAvailable) {
@@ -128,7 +131,7 @@ if (submitButton && usernameInput && passwordInput) {
         const password = passwordInput.value;
         const users = await getUsers();
         const user = users.find((u) => u.userName === usernameInput.value);
-        errorMessage.style.color = " ";
+        errorMessage.textContent = "Log In Successfull! ";
         //Log in div for user page
         // form!.style.display = "none";
         // const logInpage = document.createElement('div');
@@ -136,16 +139,15 @@ if (submitButton && usernameInput && passwordInput) {
         // logInpage.innerHTML = `<h1>Welcome!</h1>`;
 
         if (!user) {
-            const errorMessage = document.createElement("p");
             errorMessage.textContent = "No account found for this user. Please create an account first.";
             errorMessage.style.color = "red";
             form?.appendChild(errorMessage);
             return;
+            
         }
 
         // Add password check
         else if (user.password !== password) {
-            const errorMessage = document.createElement("p");
             errorMessage.textContent = "Incorrect password. Please try again.";
             errorMessage.style.color = "red";
             form?.appendChild(errorMessage);
@@ -161,17 +163,15 @@ if (submitButton && usernameInput && passwordInput) {
 }
 
 // //Event listener for delete button
-const deleteButton = document.getElementById('delete-account-button');
 deleteButton?.addEventListener("click", async (event) => {
     event?.preventDefault();
     if (usernameInput) {
         await deleteUser(usernameInput.value);
+        errorMessage.textContent = " ";
     } else {
         console.error("Username input element not found.");
     }
 });
-
-
 
 async function deleteUser(username: string): Promise<void> {
     console.log("Deleting user");
@@ -190,9 +190,14 @@ async function deleteUser(username: string): Promise<void> {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
         console.log("User deleted successfully");
+        userDeletedSuccessfully.textContent = "User deleted successfully!"
+        document.body.appendChild(userDeletedSuccessfully);
     } catch (err) {
         console.log(err);
+        failedToDeleteUser.textContent = "User deleted successfully!"
+        document.body.appendChild(failedToDeleteUser);
         throw new Error("Failed to delete user.");
+       
     }
 }
 
