@@ -5,7 +5,7 @@ const createAccountButton = document.getElementById("create-account-button") as 
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
 const statusInput = document.getElementById("status") as HTMLInputElement | null;
-const imageUrlInput = document.getElementById("image-url") as HTMLInputElement | null;
+const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null;
 const passwordInput = document.getElementById("password") as HTMLInputElement | null;
 const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
 const form = document.getElementById('form') as HTMLFormElement | null;
@@ -87,10 +87,10 @@ async function saveUser(user: UserInfo): Promise<void> {
 
 
 //Event listener for the "image dropdown"
-if (imageSelection && imageUrlInput) {
+if (imageSelection) {
     imageSelection.addEventListener("change", () => {
         const selectedImageUrl = imageSelection.value;
-        imageUrlInput.value = selectedImageUrl;
+        imageSelection.value = selectedImageUrl;
     });
 } else {
     console.error("Image dropdown element not found.");
@@ -98,7 +98,7 @@ if (imageSelection && imageUrlInput) {
 
 
 // Event listener for the "create account" button
-if (createAccountButton && usernameInput && passwordInput && statusInput && imageUrlInput) {
+if (createAccountButton && usernameInput && passwordInput && statusInput) {
     createAccountButton.addEventListener("click", async () => {
         userDeletedSuccessfully.textContent = " "
         errorMessage.innerText = " ";
@@ -115,11 +115,15 @@ if (createAccountButton && usernameInput && passwordInput && statusInput && imag
             userName: userName,
             password: passwordInput.value,
             status: statusInput.value,
-            imageurl: imageUrlInput.value,
+            imageurl: imageSelection?.value ?? "", // Provides a default value
             newUser: true,
         };
 
         await saveUser(userInfo);
+        const successCreatingAccount = document.createElement('h1');
+    successCreatingAccount.textContent = "Your account was successfully created!";
+    successCreatingAccount.style.color = "green";
+    document.body.appendChild(successCreatingAccount);
     });
 } else {
     console.error("One or more DOM elements not found.");
@@ -132,7 +136,7 @@ async function isUsernameAvailable(username: string): Promise<boolean> {
     return !users.some((user) => user.userName === username);
 }
 
-//already logeedd in users
+//already logged in users
 function displayLoggedInUsers(users: UserInfo[]): void {
     if (!loggedInUsersList) {
         console.error("Logged-in users list element not found.");
@@ -149,8 +153,6 @@ function displayLoggedInUsers(users: UserInfo[]): void {
         }
     }
 }
-
-
 
 
 // Event listener for the "submit" button
