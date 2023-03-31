@@ -121,7 +121,7 @@ if (createAccountButton && usernameInput && passwordInput && statusInput) {
 
         await saveUser(userInfo);
         const successCreatingAccount = document.createElement('h1');
-        successCreatingAccount.textContent = "Your account was successfully created!";
+        successCreatingAccount.textContent = "Your account was successfully created and you may log in!";
         successCreatingAccount.style.color = "green";
         document.body.appendChild(successCreatingAccount);
     });
@@ -201,6 +201,7 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
+//function for disable buttons
 function updateButtonStates() {
     if (createAccountButton && usernameInput && passwordInput) {
         createAccountButton.disabled = !usernameInput.value || !passwordInput.value;
