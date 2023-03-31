@@ -121,13 +121,14 @@ if (createAccountButton && usernameInput && passwordInput && statusInput) {
 
         await saveUser(userInfo);
         const successCreatingAccount = document.createElement('h1');
-    successCreatingAccount.textContent = "Your account was successfully created!";
-    successCreatingAccount.style.color = "green";
-    document.body.appendChild(successCreatingAccount);
+        successCreatingAccount.textContent = "Your account was successfully created!";
+        successCreatingAccount.style.color = "green";
+        document.body.appendChild(successCreatingAccount);
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
+
 
 //control already existing users
 async function isUsernameAvailable(username: string): Promise<boolean> {
@@ -200,6 +201,29 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
+function updateButtonStates() {
+    if (createAccountButton && usernameInput && passwordInput) {
+        createAccountButton.disabled = !usernameInput.value || !passwordInput.value;
+    }
+    if (submitButton && usernameInput && passwordInput) {
+        submitButton.disabled = !usernameInput.value || !passwordInput.value;
+    }
+}
+
+if (usernameInput) {
+    usernameInput.addEventListener("input", () => {
+        updateButtonStates();
+    });
+}
+
+if (passwordInput) {
+    passwordInput.addEventListener("input", () => {
+        updateButtonStates();
+    });
+}
+
+// Initialize the buttons state
+updateButtonStates();
 
 
 // //Event listener for delete button
