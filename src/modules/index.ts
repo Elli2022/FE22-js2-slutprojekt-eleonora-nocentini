@@ -1,5 +1,6 @@
 // Get the DOM elements
 const imageSelection = document.getElementById("image-selection") as HTMLSelectElement | null;
+const loggedInUsersList = document.getElementById("logged-in-users") as HTMLUListElement | null;
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
@@ -31,7 +32,7 @@ const baseUrl = "https://social-media-68d76-default-rtdb.europe-west1.firebaseda
 async function getUsers(): Promise<UserInfo[]> {
     try {
         console.log("Fetching users");
-        const response = await fetch(`${baseUrl}users.json`); // Change this line
+        const response = await fetch(`${baseUrl}users.json`);
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -85,7 +86,7 @@ async function saveUser(user: UserInfo): Promise<void> {
 }
 
 
-//Event listener for the image dropdown
+//Event listener for the "image dropdown"
 if (imageSelection && imageUrlInput) {
     imageSelection.addEventListener("change", () => {
         const selectedImageUrl = imageSelection.value;
@@ -94,6 +95,7 @@ if (imageSelection && imageUrlInput) {
 } else {
     console.error("Image dropdown element not found.");
 }
+
 
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput && statusInput && imageUrlInput) {
@@ -130,6 +132,25 @@ async function isUsernameAvailable(username: string): Promise<boolean> {
     return !users.some((user) => user.userName === username);
 }
 
+//already logeedd in users
+function displayLoggedInUsers(users: UserInfo[]): void {
+    if (!loggedInUsersList) {
+        console.error("Logged-in users list element not found.");
+        return;
+    }
+
+    loggedInUsersList.innerHTML = "";
+
+    for (const user of users) {
+        if (!user.newUser) {
+            const listItem = document.createElement("li");
+            listItem.textContent = user.userName;
+            loggedInUsersList.appendChild(listItem);
+        }
+    }
+}
+
+
 
 
 // Event listener for the "submit" button
@@ -148,7 +169,6 @@ if (submitButton && usernameInput && passwordInput) {
             errorMessage.style.color = "red";
             form?.appendChild(errorMessage);
             return;
-
         }
 
         // Add password check
@@ -162,17 +182,23 @@ if (submitButton && usernameInput && passwordInput) {
         user.newUser = false;
         await saveUser(user);
 
+        // Display logged-in users
+        displayLoggedInUsers(await getUsers());
+
         //Log in div for user page
         form!.style.display = "none";
         const logInpage = document.createElement('div');
         document.body.appendChild(logInpage);
-        logInpage.innerHTML = `<h1>Welcome ${usernameInput.value} !</h1> `;
+        logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
+        const statusMessage = document.createElement('h1');
+        document.body.appendChild(statusMessage);
+        statusMessage.innerHTML = `Status Message: ${statusInput?.value}`;
     });
-
-
 } else {
     console.error("One or more DOM elements not found.");
 }
+
+
 
 // //Event listener for delete button
 deleteButton?.addEventListener("click", async (event) => {
