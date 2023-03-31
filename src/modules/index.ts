@@ -115,20 +115,15 @@ if (createAccountButton && usernameInput && passwordInput && statusInput) {
             userName: userName,
             password: passwordInput.value,
             status: statusInput.value,
-            imageurl: imageSelection?.value ?? "", // Provides a default value
+            imageurl: imageSelection?.value ??"", 
             newUser: true,
         };
 
         await saveUser(userInfo);
-        const successCreatingAccount = document.createElement('h1');
-        successCreatingAccount.textContent = "Your account was successfully created and you may log in!";
-        successCreatingAccount.style.color = "green";
-        document.body.appendChild(successCreatingAccount);
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
-
 
 //control already existing users
 async function isUsernameAvailable(username: string): Promise<boolean> {
@@ -137,7 +132,7 @@ async function isUsernameAvailable(username: string): Promise<boolean> {
     return !users.some((user) => user.userName === username);
 }
 
-//already logged in users
+//already logeedd in users
 function displayLoggedInUsers(users: UserInfo[]): void {
     if (!loggedInUsersList) {
         console.error("Logged-in users list element not found.");
@@ -149,15 +144,17 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     for (const user of users) {
         if (!user.newUser) {
             const listItem = document.createElement("li");
-            listItem.textContent = user.userName;
+            listItem.textContent = `${user.userName} - Status: ${user.status}`; // Use user.status instead of statusInput?.value
             loggedInUsersList.appendChild(listItem);
         }
     }
 }
 
 
+
+
 // Event listener for the "submit" button
-if (submitButton && usernameInput && passwordInput) {
+if (submitButton && usernameInput && passwordInput && statusInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
         // Remove error message if it exists
@@ -182,6 +179,8 @@ if (submitButton && usernameInput && passwordInput) {
             return;
         }
 
+        // Update the user's status
+        user.status = statusInput.value; // Add this line to update the status
         user.newUser = false;
         await saveUser(user);
 
@@ -201,30 +200,6 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
-//function for disable buttons
-function updateButtonStates() {
-    if (createAccountButton && usernameInput && passwordInput) {
-        createAccountButton.disabled = !usernameInput.value || !passwordInput.value;
-    }
-    if (submitButton && usernameInput && passwordInput) {
-        submitButton.disabled = !usernameInput.value || !passwordInput.value;
-    }
-}
-
-if (usernameInput) {
-    usernameInput.addEventListener("input", () => {
-        updateButtonStates();
-    });
-}
-
-if (passwordInput) {
-    passwordInput.addEventListener("input", () => {
-        updateButtonStates();
-    });
-}
-
-// Initialize the buttons state
-updateButtonStates();
 
 
 // //Event listener for delete button
