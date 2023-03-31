@@ -1,4 +1,5 @@
 // Get the DOM elements
+const imageSelection = document.getElementById("image-selection") as HTMLSelectElement | null;
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
@@ -19,7 +20,6 @@ interface UserInfo {
     status: string;
     imageurl: string;
     newUser: boolean;
-    // Add any other properties that users have in your data
 }
 
 interface FirebaseResponse {
@@ -84,6 +84,16 @@ async function saveUser(user: UserInfo): Promise<void> {
     }
 }
 
+
+//Event listener for the image dropdown
+if (imageSelection && imageUrlInput) {
+    imageSelection.addEventListener("change", () => {
+        const selectedImageUrl = imageSelection.value;
+        imageUrlInput.value = selectedImageUrl;
+    });
+} else {
+    console.error("Image dropdown element not found.");
+}
 
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput && statusInput && imageUrlInput) {
