@@ -115,7 +115,7 @@ if (createAccountButton && usernameInput && passwordInput && statusInput) {
             userName: userName,
             password: passwordInput.value,
             status: statusInput.value,
-            imageurl: imageSelection?.value ??"", 
+            imageurl: imageSelection?.value ?? "",
             newUser: true,
         };
 
@@ -144,7 +144,16 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     for (const user of users) {
         if (!user.newUser) {
             const listItem = document.createElement("li");
-            listItem.textContent = `${user.userName} - Status: ${user.status}`; // Use user.status instead of statusInput?.value
+            listItem.textContent = `${user.userName} - Status: ${user.status}`;
+
+            // Create an img element and set its src attribute to the user's image URL
+            const userImage = document.createElement("img");
+            userImage.src = user.imageurl;
+            userImage.style.width = "50px"; // Set the image width (optional)
+            userImage.style.height = "50px"; // Set the image height (optional)
+
+            // Append the img element to the list item
+            listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
         }
     }
@@ -190,16 +199,15 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         //Log in div for user page
         form!.style.display = "none";
         const logInpage = document.createElement('div');
-        document.body.appendChild(logInpage);
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
-        const statusMessage = document.createElement('h1');
-        document.body.appendChild(statusMessage);
-        statusMessage.innerHTML = `Status Message: ${statusInput?.value}`;
+        document.body.appendChild(logInpage);
+        // const statusMessage = document.createElement('h1');
+        // document.body.appendChild(statusMessage);
+        // statusMessage.innerHTML = `Status Message: ${statusInput?.value}`;
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
-
 
 
 // //Event listener for delete button
