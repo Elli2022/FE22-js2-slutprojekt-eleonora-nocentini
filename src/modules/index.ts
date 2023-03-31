@@ -132,7 +132,7 @@ if (submitButton && usernameInput && passwordInput) {
         const users = await getUsers();
         const user = users.find((u) => u.userName === usernameInput.value);
         errorMessage.textContent = "Log In Successfull! ";
-        
+
         if (!user) {
             errorMessage.textContent = "No account found for this user. Please create an account first.";
             errorMessage.style.color = "red";
@@ -152,14 +152,14 @@ if (submitButton && usernameInput && passwordInput) {
         user.newUser = false;
         await saveUser(user);
 
-         //Log in div for user page
+        //Log in div for user page
         form!.style.display = "none";
         const logInpage = document.createElement('div');
         document.body.appendChild(logInpage);
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value} !</h1> `;
     });
 
-   
+
 } else {
     console.error("One or more DOM elements not found.");
 }
