@@ -214,8 +214,8 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         document.body.appendChild(sendMessageButton);
 
         const deleteButton2 = document.createElement('button');
-        deleteButton2.innerText = "Delete User"; // Set inner text for the delete button
-        document.body.appendChild(deleteButton2); // Append delete button to the document body
+        deleteButton2.innerText = "Delete User"; 
+        document.body.appendChild(deleteButton2); 
         
 
         
@@ -260,7 +260,7 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
             
         sendMessageButton.addEventListener("click", async () => { 
             const status = messageInput.value;
-            //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST
+            //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST JAAAAA det funkar jag är ett fucking geni.(oftast inte. Bara ibland. som här)
             const url = `${baseUrl}users/${user.userName}/status.json`;
             const init = {
                 method: "PUT",
@@ -270,7 +270,7 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
                 },
             };
             try {
-                const response = await fetch(url, init); // Added "await"
+                const response = await fetch(url, init); 
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
