@@ -5,14 +5,17 @@ const createAccountButton = document.getElementById("create-account-button") as 
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
 const statusInput = document.getElementById("status") as HTMLInputElement | null;
-const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null;
+const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null; // Unused variable, consider removing it
 const passwordInput = document.getElementById("password") as HTMLInputElement | null;
-const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
+const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null; // Unused variable, consider removing it
 const form = document.getElementById('form') as HTMLFormElement | null;
 const errorMessage = document.createElement("p");
-const deleteButton = document.getElementById('delete-account-button');
+// const deleteButton = document.getElementById('delete-account-button') as HTMLButtonElement | null; // Added "as HTMLButtonElement | null"
 const userDeletedSuccessfully = document.createElement('h1');
 const failedToDeleteUser = document.createElement('h1');
+const inputElement = document.createElement('input') as HTMLInputElement; // Unused variable, consider removing it
+
+
 
 
 interface UserInfo {
@@ -161,7 +164,6 @@ function displayLoggedInUsers(users: UserInfo[]): void {
 
 
 
-
 // Event listener for the "submit" button
 if (submitButton && usernameInput && passwordInput && statusInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
@@ -201,52 +203,121 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         const logInpage = document.createElement('div');
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
         document.body.appendChild(logInpage);
-        // const statusMessage = document.createElement('h1');
-        // document.body.appendChild(statusMessage);
-        // statusMessage.innerHTML = `Status Message: ${statusInput?.value}`;
+        
+        const messageInput = document.createElement('input');
+        messageInput.id = "status";
+        document.body.appendChild(messageInput);
+        messageInput.style.width = "100px";
+        const sendMessageButton = document.createElement('button');
+        sendMessageButton.innerText = "Send statusmessage! "
+        sendMessageButton.style.width = "110px";
+        document.body.appendChild(sendMessageButton);
+
+        const deleteButton2 = document.createElement('button');
+        deleteButton2.innerText = "Delete my account!"; 
+        document.body.appendChild(deleteButton2); 
+
+        deleteButton2?.addEventListener("click", async (event) => {
+                event?.preventDefault();
+                if (usernameInput) {
+                    await deleteUser(usernameInput.value);
+                    errorMessage.textContent = " ";
+                } else {
+                    console.error("Username input element not found.");
+                }
+            });
+            
+            async function deleteUser(username: string): Promise<void> {
+                console.log("Deleting user");
+                const url = `${baseUrl}users/${username}.json`;
+                const init = {
+                    method: "DELETE",
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                    },
+                };
+            
+                try {
+                    const response = await fetch(url, init);
+            
+                    if (!response.ok) {
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    console.log("User deleted successfully");
+                    userDeletedSuccessfully.textContent = "User deleted successfully!"
+                    document.body.appendChild(userDeletedSuccessfully);
+                } catch (err) {
+                    console.log(err);
+                    failedToDeleteUser.textContent = "User deleted successfully!"
+                    document.body.appendChild(failedToDeleteUser);
+                    throw new Error("Failed to delete user.");
+            
+                }
+            }
+            
+            
+        sendMessageButton.addEventListener("click", async () => { // Added "async"
+            const url = `${baseUrl}users/${user.status}.json`;
+            const init = {
+                method: "PUT",
+                body: JSON.stringify(user.userName.status),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            };
+            try {
+                const response = await fetch(url, init); // Added "await"
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+            } catch (err) {
+                console.log(err);
+                throw new Error("Failed to save user information.");
+            }
+        });
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
 
+//Event listener for delete button
+// deleteButton?.addEventListener("click", async (event) => {
+//     event?.preventDefault();
+//     if (usernameInput) {
+//         await deleteUser(usernameInput.value);
+//         errorMessage.textContent = " ";
+//     } else {
+//         console.error("Username input element not found.");
+//     }
+// });
 
-// //Event listener for delete button
-deleteButton?.addEventListener("click", async (event) => {
-    event?.preventDefault();
-    if (usernameInput) {
-        await deleteUser(usernameInput.value);
-        errorMessage.textContent = " ";
-    } else {
-        console.error("Username input element not found.");
-    }
-});
+// async function deleteUser(username: string): Promise<void> {
+//     console.log("Deleting user");
+//     const url = `${baseUrl}users/${username}.json`;
+//     const init = {
+//         method: "DELETE",
+//         headers: {
+//             "Content-type": "application/json; charset=UTF-8",
+//         },
+//     };
 
-async function deleteUser(username: string): Promise<void> {
-    console.log("Deleting user");
-    const url = `${baseUrl}users/${username}.json`;
-    const init = {
-        method: "DELETE",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8",
-        },
-    };
+//     try {
+//         const response = await fetch(url, init);
 
-    try {
-        const response = await fetch(url, init);
+//         if (!response.ok) {
+//             throw new Error(`Error: ${response.status} ${response.statusText}`);
+//         }
+//         console.log("User deleted successfully");
+//         userDeletedSuccessfully.textContent = "User deleted successfully!"
+//         document.body.appendChild(userDeletedSuccessfully);
+//     } catch (err) {
+//         console.log(err);
+//         failedToDeleteUser.textContent = "User deleted successfully!"
+//         document.body.appendChild(failedToDeleteUser);
+//         throw new Error("Failed to delete user.");
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-        console.log("User deleted successfully");
-        userDeletedSuccessfully.textContent = "User deleted successfully!"
-        document.body.appendChild(userDeletedSuccessfully);
-    } catch (err) {
-        console.log(err);
-        failedToDeleteUser.textContent = "User deleted successfully!"
-        document.body.appendChild(failedToDeleteUser);
-        throw new Error("Failed to delete user.");
-
-    }
-}
+//     }
+// }
 
 
