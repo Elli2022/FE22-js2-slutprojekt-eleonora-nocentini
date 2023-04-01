@@ -214,9 +214,11 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         document.body.appendChild(sendMessageButton);
 
         const deleteButton2 = document.createElement('button');
-        deleteButton2.innerText = "Delete my account!"; 
-        document.body.appendChild(deleteButton2); 
+        deleteButton2.innerText = "Delete User"; // Set inner text for the delete button
+        document.body.appendChild(deleteButton2); // Append delete button to the document body
+        
 
+        
         deleteButton2?.addEventListener("click", async (event) => {
                 event?.preventDefault();
                 if (usernameInput) {
@@ -256,11 +258,13 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
             }
             
             
-        sendMessageButton.addEventListener("click", async () => { // Added "async"
-            const url = `${baseUrl}users/${user.status}.json`;
+        sendMessageButton.addEventListener("click", async () => { 
+            const status = messageInput.value;
+            //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST
+            const url = `${baseUrl}users/${user.userName}/status.json`;
             const init = {
                 method: "PUT",
-                body: JSON.stringify(user.userName.status),
+                body: JSON.stringify(status),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                 },
@@ -280,44 +284,3 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
 } else {
     console.error("One or more DOM elements not found.");
 }
-
-//Event listener for delete button
-// deleteButton?.addEventListener("click", async (event) => {
-//     event?.preventDefault();
-//     if (usernameInput) {
-//         await deleteUser(usernameInput.value);
-//         errorMessage.textContent = " ";
-//     } else {
-//         console.error("Username input element not found.");
-//     }
-// });
-
-// async function deleteUser(username: string): Promise<void> {
-//     console.log("Deleting user");
-//     const url = `${baseUrl}users/${username}.json`;
-//     const init = {
-//         method: "DELETE",
-//         headers: {
-//             "Content-type": "application/json; charset=UTF-8",
-//         },
-//     };
-
-//     try {
-//         const response = await fetch(url, init);
-
-//         if (!response.ok) {
-//             throw new Error(`Error: ${response.status} ${response.statusText}`);
-//         }
-//         console.log("User deleted successfully");
-//         userDeletedSuccessfully.textContent = "User deleted successfully!"
-//         document.body.appendChild(userDeletedSuccessfully);
-//     } catch (err) {
-//         console.log(err);
-//         failedToDeleteUser.textContent = "User deleted successfully!"
-//         document.body.appendChild(failedToDeleteUser);
-//         throw new Error("Failed to delete user.");
-
-//     }
-// }
-
-
