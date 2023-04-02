@@ -214,8 +214,8 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         document.body.appendChild(sendMessageButton);
 
         const deleteButton2 = document.createElement('button');
-        deleteButton2.innerText = "Delete User"; 
-        document.body.appendChild(deleteButton2); 
+        deleteButton2.innerText = "Delete User"; // Set inner text for the delete button
+        document.body.appendChild(deleteButton2); // Append delete button to the document body
         
 
         
@@ -270,7 +270,7 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
                 },
             };
             try {
-                const response = await fetch(url, init); 
+                const response = await fetch(url, init); // Added "await"
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
