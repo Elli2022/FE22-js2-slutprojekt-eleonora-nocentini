@@ -4,19 +4,15 @@ const loggedInUsersList = document.getElementById("logged-in-users") as HTMLULis
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
-// const statusInput = document.getElementById("status") as HTMLInputElement | null;
 const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null; // Unused variable, consider removing it
 const passwordInput = document.getElementById("password") as HTMLInputElement | null;
 const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null; // Unused variable, consider removing it
 const form = document.getElementById('form') as HTMLFormElement | null;
 const errorMessage = document.createElement("p");
-// const deleteButton = document.getElementById('delete-account-button') as HTMLButtonElement | null; // Added "as HTMLButtonElement | null"
 const userDeletedSuccessfully = document.createElement('h1');
 const failedToDeleteUser = document.createElement('h1');
 const inputElement = document.createElement('input') as HTMLInputElement; // Unused variable, consider removing it
 const messageInput = document.createElement('input');
-
-
 
 
 interface UserInfo {
@@ -141,15 +137,16 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     if (!loggedInUsersList) {
         console.error("Logged-in users list element not found.");
         return;
+        
     }
 
     loggedInUsersList.innerHTML = "";
 
     for (const user of users) {
+        
         if (!user.newUser) {
             const listItem = document.createElement("li");
             listItem.textContent = `${user.userName} - Status: ${user.status}`;
-
             // Create an img element and set its src attribute to the user's image URL
             const userImage = document.createElement("img");
             userImage.src = user.imageurl;
@@ -159,6 +156,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             // Append the img element to the list item
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
+            
         }
     }
 }
@@ -192,20 +190,18 @@ if (submitButton && usernameInput && passwordInput) {
         }
 
         // Update the user's status
-        // Add this line to update the status
         user.newUser = false;
         await saveUser(user);
 
         // Display logged-in users
         displayLoggedInUsers(await getUsers());
 
+
         //Log in div for user page
         form!.style.display = "none";
         const logInpage = document.createElement('div');
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
         document.body.appendChild(logInpage);
-        
-       
         messageInput.id = "status";
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
@@ -217,8 +213,8 @@ if (submitButton && usernameInput && passwordInput) {
         const deleteButton2 = document.createElement('button');
         deleteButton2.innerText = "Delete User"; // Set inner text for the delete button
         document.body.appendChild(deleteButton2); // Append delete button to the document body
-        
 
+        
         
         deleteButton2?.addEventListener("click", async (event) => {
                 event?.preventDefault();
@@ -271,7 +267,7 @@ if (submitButton && usernameInput && passwordInput) {
                 },
             };
             try {
-                const response = await fetch(url, init); // Added "await"
+                const response = await fetch(url, init); 
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -280,8 +276,12 @@ if (submitButton && usernameInput && passwordInput) {
                 console.log(err);
                 throw new Error("Failed to save user information.");
             }
-        });
+
+        // Display logged-in users
+        displayLoggedInUsers(await getUsers());
+        }); 
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
+
