@@ -166,7 +166,14 @@ function displayLoggedInUsers(users: UserInfo[]): void {
                 const usersPage = document.createElement('div');
                 usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! Status:${user.status} </h1> `;
                 document.body.appendChild(usersPage);
-                
+                // Create an img element and set its src attribute to the user's image URL
+                const userImage = document.createElement("img");
+                userImage.src = user.imageurl;
+                userImage.style.width = "50px"; // Set the image width (optional)
+                userImage.style.height = "50px"; // Set the image height (optional)
+                // Append the img element to the list item
+                usersPage.appendChild(userImage);
+
             });
         }
 
