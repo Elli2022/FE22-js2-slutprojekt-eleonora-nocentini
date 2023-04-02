@@ -13,6 +13,8 @@ const userDeletedSuccessfully = document.createElement('h1');
 const failedToDeleteUser = document.createElement('h1');
 const inputElement = document.createElement('input') as HTMLInputElement; // Unused variable, consider removing it
 const messageInput = document.createElement('input');
+const listItem = document.createElement("li");
+const body = document.getElementById('body') as HTMLBodyElement;
 
 
 interface UserInfo {
@@ -137,13 +139,13 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     if (!loggedInUsersList) {
         console.error("Logged-in users list element not found.");
         return;
-        
+
     }
 
     loggedInUsersList.innerHTML = "";
 
     for (const user of users) {
-        
+
         if (!user.newUser) {
             const listItem = document.createElement("li");
             listItem.textContent = `${user.userName} - Status: ${user.status}`;
@@ -156,10 +158,21 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             // Append the img element to the list item
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
-            
+
+            //event listener to the list item
+            listItem.addEventListener("click", () => {
+                body.innerHTML = "";
+                form!.style.display = "none";
+                const usersPage = document.createElement('div');
+                usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! Status:${user.status} </h1> `;
+                document.body.appendChild(usersPage);
+                
+            });
         }
+
     }
 }
+
 
 
 
@@ -211,51 +224,51 @@ if (submitButton && usernameInput && passwordInput) {
         document.body.appendChild(sendMessageButton);
 
         const deleteButton2 = document.createElement('button');
-        deleteButton2.innerText = "Delete User"; // Set inner text for the delete button
-        document.body.appendChild(deleteButton2); // Append delete button to the document body
+        deleteButton2.innerText = "Delete User";
+        document.body.appendChild(deleteButton2);
 
-        
-        
+
+
         deleteButton2?.addEventListener("click", async (event) => {
-                event?.preventDefault();
-                if (usernameInput) {
-                    await deleteUser(usernameInput.value);
-                    errorMessage.textContent = " ";
-                } else {
-                    console.error("Username input element not found.");
-                }
-            });
-            
-            async function deleteUser(username: string): Promise<void> {
-                console.log("Deleting user");
-                const url = `${baseUrl}users/${username}.json`;
-                const init = {
-                    method: "DELETE",
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                    },
-                };
-            
-                try {
-                    const response = await fetch(url, init);
-            
-                    if (!response.ok) {
-                        throw new Error(`Error: ${response.status} ${response.statusText}`);
-                    }
-                    console.log("User deleted successfully");
-                    userDeletedSuccessfully.textContent = "User deleted successfully!"
-                    document.body.appendChild(userDeletedSuccessfully);
-                } catch (err) {
-                    console.log(err);
-                    failedToDeleteUser.textContent = "User deleted successfully!"
-                    document.body.appendChild(failedToDeleteUser);
-                    throw new Error("Failed to delete user.");
-            
-                }
+            event?.preventDefault();
+            if (usernameInput) {
+                await deleteUser(usernameInput.value);
+                errorMessage.textContent = " ";
+            } else {
+                console.error("Username input element not found.");
             }
-            
-            
-        sendMessageButton.addEventListener("click", async () => { 
+        });
+
+        async function deleteUser(username: string): Promise<void> {
+            console.log("Deleting user");
+            const url = `${baseUrl}users/${username}.json`;
+            const init = {
+                method: "DELETE",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                },
+            };
+
+            try {
+                const response = await fetch(url, init);
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+                console.log("User deleted successfully");
+                userDeletedSuccessfully.textContent = "User deleted successfully!"
+                document.body.appendChild(userDeletedSuccessfully);
+            } catch (err) {
+                console.log(err);
+                failedToDeleteUser.textContent = "User deleted successfully!"
+                document.body.appendChild(failedToDeleteUser);
+                throw new Error("Failed to delete user.");
+
+            }
+        }
+
+
+        sendMessageButton.addEventListener("click", async () => {
             const status = messageInput.value;
             //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST JAAAAA det funkar jag är ett fucking geni.(oftast inte. Bara ibland. som här)
             const url = `${baseUrl}users/${user.userName}/status.json`;
@@ -267,7 +280,7 @@ if (submitButton && usernameInput && passwordInput) {
                 },
             };
             try {
-                const response = await fetch(url, init); 
+                const response = await fetch(url, init);
 
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
@@ -277,9 +290,9 @@ if (submitButton && usernameInput && passwordInput) {
                 throw new Error("Failed to save user information.");
             }
 
-        // Display logged-in users
-        displayLoggedInUsers(await getUsers());
-        }); 
+            // Display logged-in users
+            displayLoggedInUsers(await getUsers());
+        });
     });
 } else {
     console.error("One or more DOM elements not found.");
