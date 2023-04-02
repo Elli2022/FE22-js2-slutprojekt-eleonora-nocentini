@@ -4,7 +4,7 @@ const loggedInUsersList = document.getElementById("logged-in-users") as HTMLULis
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
-const statusInput = document.getElementById("status") as HTMLInputElement | null;
+// const statusInput = document.getElementById("status") as HTMLInputElement | null;
 const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null; // Unused variable, consider removing it
 const passwordInput = document.getElementById("password") as HTMLInputElement | null;
 const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null; // Unused variable, consider removing it
@@ -14,6 +14,7 @@ const errorMessage = document.createElement("p");
 const userDeletedSuccessfully = document.createElement('h1');
 const failedToDeleteUser = document.createElement('h1');
 const inputElement = document.createElement('input') as HTMLInputElement; // Unused variable, consider removing it
+const messageInput = document.createElement('input');
 
 
 
@@ -101,7 +102,7 @@ if (imageSelection) {
 
 
 // Event listener for the "create account" button
-if (createAccountButton && usernameInput && passwordInput && statusInput) {
+if (createAccountButton && usernameInput && passwordInput) {
     createAccountButton.addEventListener("click", async () => {
         userDeletedSuccessfully.textContent = " "
         errorMessage.innerText = " ";
@@ -117,7 +118,7 @@ if (createAccountButton && usernameInput && passwordInput && statusInput) {
         const userInfo: UserInfo = {
             userName: userName,
             password: passwordInput.value,
-            status: statusInput.value,
+            status: "",
             imageurl: imageSelection?.value ?? "",
             newUser: true,
         };
@@ -165,7 +166,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
 
 
 // Event listener for the "submit" button
-if (submitButton && usernameInput && passwordInput && statusInput) {
+if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
         // Remove error message if it exists
@@ -191,7 +192,7 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         }
 
         // Update the user's status
-        user.status = statusInput.value; // Add this line to update the status
+        // Add this line to update the status
         user.newUser = false;
         await saveUser(user);
 
@@ -204,7 +205,7 @@ if (submitButton && usernameInput && passwordInput && statusInput) {
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
         document.body.appendChild(logInpage);
         
-        const messageInput = document.createElement('input');
+       
         messageInput.id = "status";
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
