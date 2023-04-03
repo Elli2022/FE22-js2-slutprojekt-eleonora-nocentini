@@ -188,9 +188,9 @@ function displayUserPage(user: UserInfo): void {
     const backToLogInPageButton = document.createElement("button");
     backToLogInPageButton.textContent = "Back to Log In Page";
     document.body.appendChild(backToLogInPageButton);
-    backToLogInPageButton.addEventListener("click", async () => {
-
-
+    backToLogInPageButton.addEventListener("click", async (event) => {
+        event.preventDefault();
+        form!.style.display = "block";
     }
     );
 }
@@ -284,13 +284,16 @@ if (submitButton && usernameInput && passwordInput) {
             
                 // Display logged-in users
                 displayLoggedInUsers(await getUsers());
+
+                //takes away the logged in page and back to the login page
                 messageInput.style.display="none";
                 logInpage.innerHTML = "";
                 sendMessageButton.style.display="none";
                 deleteButton2.style.display="none";
                 userDeletedSuccessfully.textContent = " "
                 form!.style.display=   "block"; 
-
+                // usernameInput!.value ="";
+                passwordInput!.value ="";
 
 
             } catch (err) {
