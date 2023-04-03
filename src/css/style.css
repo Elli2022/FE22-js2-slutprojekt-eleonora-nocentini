@@ -1,80 +1,72 @@
+/* General styles */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
 }
 
-header {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1rem;
+h1 {
+  font-size: 24px;
+  color: #333;
 }
 
-main {
-    flex: 1;
+/* Form styles */
+#form {
+  background-color: #fff;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 60px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
-.user {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 1rem;
-    margin: 1rem;
-    width: calc(33.333% - 2rem);
-    box-sizing: border-box;
+input[type="text"], input[type="password"], select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  /* align-items: center; */
 }
 
-.user img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.user h3 {
-    margin: 0.5rem 0;
+button:hover {
+  background-color: #0056b3;
 }
 
-.status {
-    font-style: italic;
-    color: hotpink;
+/* Logged-in users list styles */
+#logged-in-users {
+  padding: 0;
+  list-style-type: none;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
+#logged-in-users li {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
 }
 
-footer {
-    background-color: #222;
-    padding: 20px;
-    color: #fff;
-    text-align: center;
-    margin: auto;
-  }
-  
-  .social-media-icons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-  }
-  
-  .social-media-icons a {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  
-  .social-media-icons img {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .copyright {
-    margin: 0;
-    font-size: 0.9em;
-  }
+#logged-in-users li img {
+  margin-right: 10px;
+}
+
+/* Error message styles */
+p {
+  color: #f00;
+  font-size: 14px;
+  margin-bottom: 10px;
+}

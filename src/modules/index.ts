@@ -4,17 +4,19 @@ const loggedInUsersList = document.getElementById("logged-in-users") as HTMLULis
 const createAccountButton = document.getElementById("create-account-button") as HTMLButtonElement | null;
 const submitButton = document.getElementById("submit-button") as HTMLButtonElement | null;
 const usernameInput = document.getElementById("username") as HTMLInputElement | null;
-const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null; // Unused variable, consider removing it
+// const imageSelectionInput = document.getElementById("image-selection") as HTMLInputElement | null;  
 const passwordInput = document.getElementById("password") as HTMLInputElement | null;
-const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null; // Unused variable, consider removing it
+// const confirmPasswordInput = document.getElementById("confirm-password") as HTMLInputElement | null;
 const form = document.getElementById('form') as HTMLFormElement | null;
 const errorMessage = document.createElement("p");
 const userDeletedSuccessfully = document.createElement('h1');
 const failedToDeleteUser = document.createElement('h1');
-const inputElement = document.createElement('input') as HTMLInputElement; // Unused variable, consider removing it
+// const inputElement = document.createElement('input') as HTMLInputElement; 
 const messageInput = document.createElement('input');
 const listItem = document.createElement("li");
 const body = document.getElementById('body') as HTMLBodyElement;
+const accountCreated = document.createElement("h1");
+
 
 
 interface UserInfo {
@@ -106,6 +108,8 @@ if (createAccountButton && usernameInput && passwordInput) {
         errorMessage.innerText = " ";
         const userName = usernameInput.value;
         const isAvailable = await isUsernameAvailable(userName);
+        body.appendChild(accountCreated);
+        accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
         if (!isAvailable) {
             errorMessage.textContent = "Username is already taken. Please choose another one.";
             errorMessage.style.color = "red";
@@ -134,59 +138,69 @@ async function isUsernameAvailable(username: string): Promise<boolean> {
     return !users.some((user) => user.userName === username);
 }
 
-//already logeedd in users
+// Displaying already logged in users
 function displayLoggedInUsers(users: UserInfo[]): void {
     if (!loggedInUsersList) {
         console.error("Logged-in users list element not found.");
         return;
-
     }
 
     loggedInUsersList.innerHTML = "";
 
     for (const user of users) {
-
         if (!user.newUser) {
             const listItem = document.createElement("li");
             listItem.textContent = `${user.userName} - Status: ${user.status}`;
+
             // Create an img element and set its src attribute to the user's image URL
             const userImage = document.createElement("img");
             userImage.src = user.imageurl;
-            userImage.style.width = "50px"; // Set the image width (optional)
-            userImage.style.height = "50px"; // Set the image height (optional)
+            userImage.style.width = "50px";
+            userImage.style.height = "50px";
 
             // Append the img element to the list item
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
 
-            //event listener to the list item
+            // Event listener to the list item
             listItem.addEventListener("click", () => {
-                body.innerHTML = "";
-                form!.style.display = "none";
-                const usersPage = document.createElement('div');
-                usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! Status:${user.status} </h1> `;
-                document.body.appendChild(usersPage);
-                // Create an img element and set its src attribute to the user's image URL
-                const userImage = document.createElement("img");
-                userImage.src = user.imageurl;
-                userImage.style.width = "50px"; // Set the image width (optional)
-                userImage.style.height = "50px"; // Set the image height (optional)
-                // Append the img element to the list item
-                usersPage.appendChild(userImage);
-
+                displayUserPage(user);
             });
         }
-
     }
 }
 
+function displayUserPage(user: UserInfo): void {
+    document.body.innerHTML = "";
+    form!.style.display = "none";
+    const usersPage = document.createElement('div');
+    usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! Status:${user.status} </h1>`;
+    document.body.appendChild(usersPage);
 
+    // Create an img element and set its src attribute to the user's image URL
+    const userImage = document.createElement("img");
+    userImage.src = user.imageurl;
+    userImage.style.width = "50px";
+    userImage.style.height = "50px";
+    usersPage.appendChild(userImage);
+
+    // Event listener for the button to get the user back to the login page where every user is logged in.
+    const backToLogInPageButton = document.createElement("button");
+    backToLogInPageButton.textContent = "Back to Log In Page";
+    document.body.appendChild(backToLogInPageButton);
+    backToLogInPageButton.addEventListener("click", async () => {
+
+
+    }
+    );
+}
 
 
 // Event listener for the "submit" button
 if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
+        accountCreated.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
         const password = passwordInput.value;
@@ -238,6 +252,7 @@ if (submitButton && usernameInput && passwordInput) {
 
         deleteButton2?.addEventListener("click", async (event) => {
             event?.preventDefault();
+            listItem.textContent = " ";
             if (usernameInput) {
                 await deleteUser(usernameInput.value);
                 errorMessage.textContent = " ";
@@ -265,9 +280,17 @@ if (submitButton && usernameInput && passwordInput) {
                 console.log("User deleted successfully");
                 userDeletedSuccessfully.textContent = "User deleted successfully!"
                 document.body.appendChild(userDeletedSuccessfully);
+
+            
+                // Display logged-in users
+                displayLoggedInUsers(await getUsers());
+                messageInput.style.display="none";
+                logInpage.innerHTML = "";
+                sendMessageButton.style.display="none";
+
             } catch (err) {
                 console.log(err);
-                failedToDeleteUser.textContent = "User deleted successfully!"
+                failedToDeleteUser.textContent = "Failed to delete user. Please try again.";
                 document.body.appendChild(failedToDeleteUser);
                 throw new Error("Failed to delete user.");
 
@@ -299,6 +322,7 @@ if (submitButton && usernameInput && passwordInput) {
 
             // Display logged-in users
             displayLoggedInUsers(await getUsers());
+           
         });
     });
 } else {
