@@ -287,6 +287,11 @@ if (submitButton && usernameInput && passwordInput) {
                 messageInput.style.display="none";
                 logInpage.innerHTML = "";
                 sendMessageButton.style.display="none";
+                deleteButton2.style.display="none";
+                userDeletedSuccessfully.textContent = " "
+                form!.style.display=   "block"; 
+
+
 
             } catch (err) {
                 console.log(err);
