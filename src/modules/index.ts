@@ -104,12 +104,22 @@ if (imageSelection) {
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput) {
     createAccountButton.addEventListener("click", async () => {
-        userDeletedSuccessfully.textContent = " "
+        userDeletedSuccessfully.textContent = " ";
         errorMessage.innerText = " ";
         const userName = usernameInput.value;
+        const password = passwordInput.value;
+
+        if (!userName || !password) {
+            errorMessage.textContent = "Username and / or password cannot be empty.";
+            errorMessage.style.color = "red";
+            createAccountButton.insertAdjacentElement("afterend", errorMessage);
+            return;
+        }
+
         const isAvailable = await isUsernameAvailable(userName);
         body.appendChild(accountCreated);
         accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
+
         if (!isAvailable) {
             errorMessage.textContent = "Username is already taken. Please choose another one.";
             errorMessage.style.color = "red";
@@ -119,7 +129,7 @@ if (createAccountButton && usernameInput && passwordInput) {
 
         const userInfo: UserInfo = {
             userName: userName,
-            password: passwordInput.value,
+            password: password,
             status: "",
             imageurl: imageSelection?.value ?? "",
             newUser: true,
@@ -130,6 +140,7 @@ if (createAccountButton && usernameInput && passwordInput) {
 } else {
     console.error("One or more DOM elements not found.");
 }
+
 
 //control already existing users
 async function isUsernameAvailable(username: string): Promise<boolean> {
