@@ -117,6 +117,7 @@ if (createAccountButton && usernameInput && passwordInput) {
             return;
         }
 
+        //check if username is available
         const isAvailable = await isUsernameAvailable(userName);
         body.appendChild(accountCreated);
         accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
@@ -182,6 +183,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     }
 }
 
+//function for displayin user page
 function displayUserPage(user: UserInfo): void {
     document.body.innerHTML = "";
     form!.style.display = "none";
@@ -235,6 +237,7 @@ function displayUserPage(user: UserInfo): void {
         sendMessageButton.style.width = "110px";
         document.body.appendChild(sendMessageButton);
 
+        //deletebutton for deleting the user from the current page
         const deleteButton2 = document.createElement('button');
         deleteButton2.innerText = "Delete User";
         document.body.appendChild(deleteButton2);
@@ -304,6 +307,9 @@ function displayUserPage(user: UserInfo): void {
 if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
+        loggedInUsersList!.style.display = "block";
+        messageInput.style.display = "block";
+        messageInput.value = "";
         accountCreated.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
@@ -319,7 +325,7 @@ if (submitButton && usernameInput && passwordInput) {
             return;
         }
 
-        // Add password check
+        //password check
         else if (user.password !== password) {
             errorMessage.textContent = "Incorrect password. Please try again.";
             errorMessage.style.color = "red";
@@ -335,7 +341,7 @@ if (submitButton && usernameInput && passwordInput) {
         displayLoggedInUsers(await getUsers());
 
 
-        //Log in div for user page
+        //Log in div for when the user is logged in, all statusmessages shown here
         form!.style.display = "none";
         const logInpage = document.createElement('div');
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
@@ -427,9 +433,12 @@ if (submitButton && usernameInput && passwordInput) {
             passwordInput!.value = "";
             errorMessage.textContent = " ";
             logInpage!.style.display = "none";
+            loggedInUsersList!.style.display = "none";
+
         }
 
 
+        //event listener for button to send statusmessage
         sendMessageButton.addEventListener("click", async () => {
             const status = messageInput.value;
             //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST JAAAAA det funkar jag är ett fucking geni.(oftast inte. Bara ibland. som här)
@@ -454,6 +463,7 @@ if (submitButton && usernameInput && passwordInput) {
 
             // Display logged-in users
             displayLoggedInUsers(await getUsers());
+            messageInput.value = "";
 
         });
     });
