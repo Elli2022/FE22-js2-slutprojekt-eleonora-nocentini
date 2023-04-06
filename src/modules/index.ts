@@ -119,8 +119,7 @@ if (createAccountButton && usernameInput && passwordInput) {
 
         //check if username is available
         const isAvailable = await isUsernameAvailable(userName);
-        body.appendChild(accountCreated);
-        accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
+        
 
         if (!isAvailable) {
             errorMessage.textContent = "Username is already taken. Please choose another one.";
@@ -128,6 +127,9 @@ if (createAccountButton && usernameInput && passwordInput) {
             createAccountButton.insertAdjacentElement("afterend", errorMessage);
             return;
         }
+
+        body.appendChild(accountCreated);
+        accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
 
         const userInfo: UserInfo = {
             userName: userName,
@@ -214,7 +216,7 @@ if (submitButton && usernameInput && passwordInput) {
             return;
         }
 
-        //--------------------------STATUS WALL FOR ALL USERS--------------------------//
+        //--------------------------STATUS WALL FOR ALL USERS-
 
         // Update the user's status
         user.newUser = false;
