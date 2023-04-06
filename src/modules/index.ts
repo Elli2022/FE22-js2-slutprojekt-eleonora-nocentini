@@ -119,7 +119,7 @@ if (createAccountButton && usernameInput && passwordInput) {
 
         //check if username is available
         const isAvailable = await isUsernameAvailable(userName);
-        
+
 
         if (!isAvailable) {
             errorMessage.textContent = "Username is already taken. Please choose another one.";
@@ -286,12 +286,15 @@ if (submitButton && usernameInput && passwordInput) {
                 messageInput.style.display = "none";
                 logInpage.innerHTML = "";
                 sendMessageButton.style.display = "none";
-                deleteButton2.style.display = "none";
+                logOutButton!.style.display = "none";
+                deleteButton2!.style.display = "none";
                 userDeletedSuccessfully.textContent = " "
                 form!.style.display = "block";
                 // usernameInput!.value ="";
                 passwordInput!.value = "";
-                logOutButton.style.display = "none";
+                errorMessage.textContent = " ";
+                logInpage!.style.display = "none";
+                loggedInUsersList!.style.display = "none";
 
             } catch (err) {
                 console.log(err);
