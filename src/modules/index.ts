@@ -216,7 +216,7 @@ if (submitButton && usernameInput && passwordInput) {
             return;
         }
 
-        //--------------------------STATUS WALL FOR ALL USERS-
+        //--------------------------STATUS WALL FOR ALL USERS--------------------------//
 
         // Update the user's status
         user.newUser = false;
@@ -337,7 +337,7 @@ if (submitButton && usernameInput && passwordInput) {
         });
 
         //EXTRA FUNKTION
-        //Log out button to log out user and take user back to login page with username input and password input
+        //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
         const logOutButton = document.createElement('button');
         logOutButton.textContent = "Log Out";
         document.body.appendChild(logOutButton);
@@ -399,15 +399,6 @@ function displayUserPage(user: UserInfo): void {
         // Remove error message if it exists
         errorMessage.textContent = " ";
         const users = await getUsers();
-
-
-        // Update the user's status
-        user.newUser = false;
-        await saveUser(user);
-
-        // Display logged-in users
-        displayLoggedInUsers(await getUsers());
-
 
         // //Log in div for when the user is logged in, all statusmessages shown here
         const logInpage = document.createElement('div');
