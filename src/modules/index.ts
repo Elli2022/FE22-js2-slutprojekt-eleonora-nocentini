@@ -15,8 +15,6 @@ const body = document.getElementById('body') as HTMLBodyElement;
 const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
 
-
-
 interface UserInfo {
     userName: any;
     password: string;
@@ -229,6 +227,7 @@ if (submitButton && usernameInput && passwordInput) {
         // const logInpage = document.createElement('div');
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
         document.body.appendChild(logInpage);
+        logInpage.appendChild(loggedInUsersList!)
         loggedInUsersList!.style.display = "block";
         messageInput.style.display = "block";
         messageInput.value = "";
@@ -386,8 +385,6 @@ function displayUserPage(user: UserInfo): void {
     backToLogInPageButton.addEventListener("click", async (event) => {
         event.preventDefault();
 
-        form!.style.display = "block";
-        listItem!.style.display = "block";
         backToLogInPageButton.style.display = "none";
         loggedInUsersList!.style.display = "block";
         messageInput.style.display = "block";
@@ -395,7 +392,7 @@ function displayUserPage(user: UserInfo): void {
         accountCreated.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
-        const users = await getUsers();
+       
 
         // //Log in div for when the user is logged in, all statusmessages shown here
         const logInpage = document.createElement('div');
@@ -403,25 +400,19 @@ function displayUserPage(user: UserInfo): void {
         messageInput.id = "status";
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
-
-
-        listItem.textContent = `${user.userName} - Status: ${user.status}`;
-        document.body.appendChild(listItem);
+        logInpage.appendChild(loggedInUsersList!)
 
         // Event listener to the list item
         listItem.addEventListener("click", () => {
             displayUserPage(user);
         });
 
-        displayLoggedInUsers(await getUsers());
-        document.body.appendChild(logInpage);
-        messageInput.id = "status";
-        document.body.appendChild(messageInput);
-        messageInput.style.width = "100px";
         const sendMessageButton = document.createElement('button');
         sendMessageButton.innerText = "Send statusmessage! "
         sendMessageButton.style.width = "110px";
         document.body.appendChild(sendMessageButton);
+        // usersPage.innerHTML = " ";
+        usersPage.innerHTML = `Logged-in user:${user.userName}</h1>`;
 
 
         //event listener for button to send statusmessage
@@ -445,19 +436,17 @@ function displayUserPage(user: UserInfo): void {
 
                 // Update the user.status with the new status
                 user.status = status;
-                usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! </br> Status: ${user.status}</h1>`;
             } catch (err) {
                 console.log(err);
                 throw new Error("Failed to save user information.");
             }
 
+            
+
             // Display logged-in users
             displayLoggedInUsers(await getUsers());
             messageInput.value = "";
-            listItem.textContent = `${user.userName}'s status: ${status}`;
-            document.body.appendChild(listItem);
-
-
+            
             // Event listener to the list item
             listItem.addEventListener("click", () => {
                 displayUserPage(user);
