@@ -14,6 +14,8 @@ const listItem = document.createElement("li");
 const body = document.getElementById('body') as HTMLBodyElement;
 const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
+let loggedInUser = null; // Declare loggedInUser variable
+
 
 interface UserInfo {
     userName: any;
@@ -105,6 +107,8 @@ if (createAccountButton && usernameInput && passwordInput) {
         const userName = usernameInput.value;
         const password = passwordInput.value;
 
+       
+
         if (!userName || !password) {
             errorMessage.textContent = "Username and / or password cannot be empty.";
             errorMessage.style.color = "red";
@@ -180,9 +184,6 @@ function displayLoggedInUsers(users: UserInfo[]): void {
     }
 }
 
-
-
-
 // Event listener for the "submit" button
 if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
@@ -195,7 +196,7 @@ if (submitButton && usernameInput && passwordInput) {
         const user = users.find((u) => u.userName === usernameInput.value);
         errorMessage.textContent = "Log In Successfull! ";
 
-
+        //if no user is found
         if (!user) {
             errorMessage.textContent = "No account found for this user. Please create an account first.";
             errorMessage.style.color = "red";
@@ -204,7 +205,7 @@ if (submitButton && usernameInput && passwordInput) {
         }
 
         //password check
-        else if (user.password !== password) {
+        if (user.password !== password) {
             errorMessage.textContent = "Incorrect password. Please try again.";
             errorMessage.style.color = "red";
             form?.appendChild(errorMessage);
@@ -212,7 +213,6 @@ if (submitButton && usernameInput && passwordInput) {
         }
 
         //--------------------------STATUS WALL FOR ALL USERS--------------------------//
-
         // Update the user's status
         user.newUser = false;
         await saveUser(user);
@@ -297,9 +297,7 @@ if (submitButton && usernameInput && passwordInput) {
                 failedToDeleteUser.textContent = "Failed to delete user. Please try again.";
                 document.body.appendChild(failedToDeleteUser);
                 throw new Error("Failed to delete user.");
-
             }
-
         }
 
 
@@ -332,7 +330,6 @@ if (submitButton && usernameInput && passwordInput) {
 
         });
 
-        //EXTRA FUNKTION
         //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
         const logOutButton = document.createElement('button');
         logOutButton.textContent = "Log Out";
@@ -359,8 +356,7 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
-//-----------------------------------------------EACH USER'S PAGE-----------------------------------------------//
-
+//----------------------------------EACH USER'S PAGE-------------------------------------//
 //function for displayin user page
 function displayUserPage(user: UserInfo): void {
     document.body.innerHTML = "";
@@ -376,15 +372,12 @@ function displayUserPage(user: UserInfo): void {
     userImage.style.height = "50px";
     usersPage.appendChild(userImage);
 
-
-
-    // Event listener for the button to get the user back to all users status wall
     const backToLogInPageButton = document.createElement("button");
     backToLogInPageButton.textContent = "Back to users status wall";
     document.body.appendChild(backToLogInPageButton);
+     // Event listener for the button to get the user back to all users status wall
     backToLogInPageButton.addEventListener("click", async (event) => {
         event.preventDefault();
-
         backToLogInPageButton.style.display = "none";
         loggedInUsersList!.style.display = "block";
         messageInput.style.display = "block";
@@ -392,8 +385,7 @@ function displayUserPage(user: UserInfo): void {
         accountCreated.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
-       
-
+        
         // //Log in div for when the user is logged in, all statusmessages shown here
         const logInpage = document.createElement('div');
         document.body.appendChild(logInpage);
@@ -401,12 +393,7 @@ function displayUserPage(user: UserInfo): void {
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
         logInpage.appendChild(loggedInUsersList!)
-
-        // Event listener to the list item
-        listItem.addEventListener("click", () => {
-            displayUserPage(user);
-        });
-
+        
         const sendMessageButton = document.createElement('button');
         sendMessageButton.innerText = "Send statusmessage! "
         sendMessageButton.style.width = "110px";
@@ -418,7 +405,6 @@ function displayUserPage(user: UserInfo): void {
         //event listener for button to send statusmessage
         sendMessageButton.addEventListener("click", async () => {
             const status = messageInput.value;
-            //PROBLEM HÄR!!!!!!!!!!! FUNKAR nu? TEST JAAAAA det funkar jag är ett fucking geni.(oftast inte. Bara ibland. som här)
             const url = `${baseUrl}users/${user.userName}/status.json`;
             const init = {
                 method: "PUT",
@@ -429,30 +415,21 @@ function displayUserPage(user: UserInfo): void {
             };
             try {
                 const response = await fetch(url, init);
-
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
 
                 // Update the user.status with the new status
                 user.status = status;
+                
             } catch (err) {
                 console.log(err);
                 throw new Error("Failed to save user information.");
             }
-
-            
-
             // Display logged-in users
             displayLoggedInUsers(await getUsers());
             messageInput.value = "";
-            
-            // Event listener to the list item
-            listItem.addEventListener("click", () => {
-                displayUserPage(user);
-            });
         });
-
 
         //deletebutton for deleting the user from the current page
         const deleteButton2 = document.createElement('button');
