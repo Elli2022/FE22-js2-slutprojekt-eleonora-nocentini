@@ -179,6 +179,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             // Event listener to the list item
             listItem.addEventListener("click", () => {
                 displayUserPage(user);
+                console.log(user.userName);
             });
         }
     }
@@ -327,7 +328,6 @@ if (submitButton && usernameInput && passwordInput) {
             // Display logged-in users
             displayLoggedInUsers(await getUsers());
             messageInput.value = "";
-
         });
 
         //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
@@ -349,6 +349,7 @@ if (submitButton && usernameInput && passwordInput) {
             errorMessage.textContent = " ";
             logInpage!.style.display = "none";
             loggedInUsersList!.style.display = "none";
+            window.location.reload();
         }
 
     });
