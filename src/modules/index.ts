@@ -15,6 +15,7 @@ const body = document.getElementById('body') as HTMLBodyElement;
 const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
 let loggedInUser = null; // Declare loggedInUser variable
+// let loggedInUser: UserInfo | undefined;
 
 
 interface UserInfo {
@@ -33,27 +34,21 @@ const baseUrl = "https://social-media-68d76-default-rtdb.europe-west1.firebaseda
 
 async function getUsers(): Promise<UserInfo[]> {
     try {
-        console.log("Fetching users");
+
         const response = await fetch(`${baseUrl}users.json`);
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-
         const users: FirebaseResponse | null = await response.json();
-
         if (!users) {
-            console.log("No users found.");
+
             return [];
         }
-
-        console.log(users);
         const usersArray: UserInfo[] = Object.values(users);
-        console.log(usersArray);
         return usersArray;
-
     } catch (err) {
-        console.log(err);
+
         throw new Error("Failed to fetch users");
     }
 }
@@ -61,9 +56,8 @@ async function getUsers(): Promise<UserInfo[]> {
 
 //uppdate the users array
 async function saveUser(user: UserInfo): Promise<void> {
-    console.log("Saving user");
+
     const arrData = await getUsers();
-    console.log(arrData);
     ;
 
     const url = `${baseUrl}users/${user.userName}.json`;
@@ -107,7 +101,7 @@ if (createAccountButton && usernameInput && passwordInput) {
         const userName = usernameInput.value;
         const password = passwordInput.value;
 
-       
+
 
         if (!userName || !password) {
             errorMessage.textContent = "Username and / or password cannot be empty.";
@@ -179,7 +173,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             // Event listener to the list item
             listItem.addEventListener("click", () => {
                 displayUserPage(user);
-                console.log(user.userName);
+
             });
         }
     }
@@ -196,6 +190,8 @@ if (submitButton && usernameInput && passwordInput) {
         const users = await getUsers();
         const user = users.find((u) => u.userName === usernameInput.value);
         errorMessage.textContent = "Log In Successfull! ";
+        console.log("INPUTUSERNAME FRÅN SUBMIT", usernameInput.value)
+        console.log("USER.USERNAME FRÅN SUBMIT", user!.userName);
 
         //if no user is found
         if (!user) {
@@ -244,6 +240,10 @@ if (submitButton && usernameInput && passwordInput) {
         deleteButton2.innerText = "Delete User";
         document.body.appendChild(deleteButton2);
 
+
+        // Center the buttons on the page
+        document.body.style.textAlign = "center";
+        document.body.style.alignContent = "center";
 
         deleteButton2?.addEventListener("click", async (event) => {
             event?.preventDefault();
@@ -376,9 +376,11 @@ function displayUserPage(user: UserInfo): void {
     const backToLogInPageButton = document.createElement("button");
     backToLogInPageButton.textContent = "Back to users status wall";
     document.body.appendChild(backToLogInPageButton);
-     // Event listener for the button to get the user back to all users status wall
+    // Event listener for the button to get the user back to all users status wall
     backToLogInPageButton.addEventListener("click", async (event) => {
         event.preventDefault();
+        console.log("NAMEINPUT FRÅN BACKTOLOGIN", usernameInput!.value)
+        console.log("USER.USERNAME FRÅN BACKTOLOGIN", user.userName);
         backToLogInPageButton.style.display = "none";
         loggedInUsersList!.style.display = "block";
         messageInput.style.display = "block";
@@ -386,7 +388,7 @@ function displayUserPage(user: UserInfo): void {
         accountCreated.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
-        
+
         // //Log in div for when the user is logged in, all statusmessages shown here
         const logInpage = document.createElement('div');
         document.body.appendChild(logInpage);
@@ -394,8 +396,12 @@ function displayUserPage(user: UserInfo): void {
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
         logInpage.appendChild(loggedInUsersList!)
-        
+
         const sendMessageButton = document.createElement('button');
+        sendMessageButton.style.display = "flex";
+        sendMessageButton.style.justifyContent = "center";
+        document.body.appendChild(sendMessageButton);
+
         sendMessageButton.innerText = "Send statusmessage! "
         sendMessageButton.style.width = "110px";
         document.body.appendChild(sendMessageButton);
@@ -422,7 +428,7 @@ function displayUserPage(user: UserInfo): void {
 
                 // Update the user.status with the new status
                 user.status = status;
-                
+
             } catch (err) {
                 console.log(err);
                 throw new Error("Failed to save user information.");
@@ -431,6 +437,8 @@ function displayUserPage(user: UserInfo): void {
             displayLoggedInUsers(await getUsers());
             messageInput.value = "";
         });
+
+
 
         //deletebutton for deleting the user from the current page
         const deleteButton2 = document.createElement('button');
@@ -484,6 +492,8 @@ function displayUserPage(user: UserInfo): void {
                 document.body.appendChild(failedToDeleteUser);
                 throw new Error("Failed to delete user.");
             }
+
+
         }
     });
 }

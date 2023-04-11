@@ -19,6 +19,9 @@ h1 {
   padding: 60px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 input[type="text"], input[type="password"], select {
@@ -27,27 +30,31 @@ input[type="text"], input[type="password"], select {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  /* align-items: center; */
 }
 
 button {
   background-color: #007bff;
   color: #fff;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 24px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
 /* Logged-in users list styles */
 #logged-in-users {
   padding: 0;
-  list-style-type: none;
+  /* list-style-type: none; */
 }
 
 #logged-in-users li {
@@ -58,11 +65,21 @@ button:hover {
   border-radius: 4px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
-#logged-in-users li img {
+#img {
   margin-right: 10px;
+  display: block; /* Add this line */
+  margin: 0 auto; /* Add this line */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Add this line */
+
+  
 }
+
 
 /* Error message styles */
 p {
