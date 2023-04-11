@@ -34,15 +34,11 @@ const baseUrl = "https://social-media-68d76-default-rtdb.europe-west1.firebaseda
 
 async function getUsers(): Promise<UserInfo[]> {
     try {
-
         const response = await fetch(`${baseUrl}users.json`);
-
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
-
         const users: FirebaseResponse | null = await response.json();
-
         if (!users) {
 
             return [];
@@ -198,6 +194,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
                 //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
                 const logOutButton = document.createElement('button');
                 logOutButton.style.alignSelf = "center";
+                logOutButton.classList.add("logout-button");
                 logOutButton.textContent = "Log Out";
                 document.body.appendChild(logOutButton);
                 logOutButton.addEventListener("click", backToMainPage);
@@ -230,6 +227,7 @@ if (submitButton && usernameInput && passwordInput) {
         event.preventDefault();
         accountCreated.textContent = " ";
         userDeletedSuccessfully.textContent = " ";
+        document.body.style.alignContent = "center";
         // Remove error message if it exists
         errorMessage.textContent = " ";
         const password = passwordInput.value;
@@ -285,7 +283,6 @@ if (submitButton && usernameInput && passwordInput) {
 
                     //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
                     const logOutButton = document.createElement('button');
-                    logOutButton.style.alignSelf = "center";
                     logOutButton.textContent = "Log Out";
                     document.body.appendChild(logOutButton);
                     logOutButton.addEventListener("click", backToMainPage);
@@ -457,20 +454,4 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
-// //----------------------------------EACH USER'S PAGE-------------------------------------//
-// //function for displayin user page
-// function displayUserPage(user: UserInfo): void {
-//     document.body.innerHTML = "";
-//     form!.style.display = "none";
-//     const usersPage = document.createElement('div');
-//     usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! </br> Status: ${user.status}</h1>`;
-//     document.body.appendChild(usersPage);
-
-//     // Create an img element and set its src attribute to the user's image URL
-//     const userImage = document.createElement("img");
-//     userImage.src = user.imageurl;
-//     userImage.style.width = "50px";
-//     userImage.style.height = "50px";
-//     usersPage.appendChild(userImage);
-// }
 
