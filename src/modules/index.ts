@@ -14,7 +14,7 @@ const listItem = document.createElement("li");
 const body = document.getElementById('body') as HTMLBodyElement;
 const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
-let loggedInUser = null; // Declare loggedInUser variable
+let loggedInUser: any; // Declare loggedInUser variable
 
 
 interface UserInfo {
@@ -99,51 +99,52 @@ if (imageSelection) {
 }
 
 
+// Async function for creating an account
+async function createAccount() {
+    userDeletedSuccessfully.textContent = " ";
+    errorMessage.innerText = " ";
+    const userName = usernameInput!.value;
+    const password = passwordInput!.value;
+
+    if (!userName || !password) {
+        errorMessage.textContent = "Username and / or password cannot be empty.";
+        errorMessage.style.color = "red";
+        createAccountButton!.insertAdjacentElement("afterend", errorMessage);
+        return;
+    }
+
+    // Check if username is available
+    const isAvailable = await isUsernameAvailable(userName);
+
+    if (!isAvailable) {
+        errorMessage.textContent = "Username is already taken. Please choose another one.";
+        errorMessage.style.color = "red";
+        createAccountButton!.insertAdjacentElement("afterend", errorMessage);
+        return;
+    }
+
+    body.appendChild(accountCreated);
+    accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
+
+    const userInfo = {
+        userName: userName,
+        password: password,
+        status: "",
+        imageurl: imageSelection?.value ?? "",
+        newUser: true,
+    };
+
+    await saveUser(userInfo);
+}
+
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput) {
     createAccountButton.addEventListener("click", async () => {
-        userDeletedSuccessfully.textContent = " ";
-        errorMessage.innerText = " ";
-        const userName = usernameInput.value;
-        const password = passwordInput.value;
-
-       
-
-        if (!userName || !password) {
-            errorMessage.textContent = "Username and / or password cannot be empty.";
-            errorMessage.style.color = "red";
-            createAccountButton.insertAdjacentElement("afterend", errorMessage);
-            return;
-        }
-
-        //check if username is available
-        const isAvailable = await isUsernameAvailable(userName);
-
-
-        if (!isAvailable) {
-            errorMessage.textContent = "Username is already taken. Please choose another one.";
-            errorMessage.style.color = "red";
-            createAccountButton.insertAdjacentElement("afterend", errorMessage);
-            return;
-        }
-
-        body.appendChild(accountCreated);
-        accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
-
-        const userInfo: UserInfo = {
-            userName: userName,
-            password: password,
-            status: "",
-            imageurl: imageSelection?.value ?? "",
-            newUser: true,
-        };
-
-        await saveUser(userInfo);
+        await createAccount();
     });
 } else {
     console.error("One or more DOM elements not found.");
 }
-
 
 //control already existing users
 async function isUsernameAvailable(username: string): Promise<boolean> {

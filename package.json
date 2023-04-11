@@ -15,5 +15,8 @@
   "devDependencies": {
     "del-cli": "^5.0.0",
     "parcel": "^2.8.3"
+  },
+  "dependencies": {
+    "node": "^19.8.1"
   }
 }
