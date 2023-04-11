@@ -130,6 +130,8 @@ if (createAccountButton && usernameInput && passwordInput) {
         body.appendChild(accountCreated);
         accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
 
+
+
         const userInfo: UserInfo = {
             userName: userName,
             password: password,
@@ -176,7 +178,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
 
-            // Event listener to the list item
+
             // Event listener to the list item
             listItem.addEventListener("click", () => {
 
@@ -227,6 +229,7 @@ if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
         event.preventDefault();
         accountCreated.textContent = " ";
+        userDeletedSuccessfully.textContent = " ";
         // Remove error message if it exists
         errorMessage.textContent = " ";
         const password = passwordInput.value;
@@ -256,41 +259,30 @@ if (submitButton && usernameInput && passwordInput) {
             console.error("Logged-in users list element not found.");
             return;
         }
-    
+
         loggedInUsersList.innerHTML = "";
-    
+
         for (const user of users) {
             if (!user.newUser) {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${user.userName} - Status: ${user.status}`;
-    
-                // Create an img element and set its src attribute to the user's image URL
-                const userImage = document.createElement("img");
-                userImage.src = user.imageurl;
-                userImage.style.width = "50px";
-                userImage.style.height = "50px";
-    
-                // Append the img element to the list item
-                listItem.appendChild(userImage);
-                loggedInUsersList.appendChild(listItem);
-    
-                // Event listener to the list item
+                document.body.innerHTML = "";
+
                 // Event listener to the list item
                 listItem.addEventListener("click", () => {
-    
+
                     document.body.innerHTML = "";
                     form!.style.display = "none";
                     const usersPage = document.createElement('div');
                     usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! </br> Status: ${user.status}</h1>`;
                     document.body.appendChild(usersPage);
-    
+                    document.body.style.alignContent = "center";
+
                     // Create an img element and set its src attribute to the user's image URL
                     const userImage = document.createElement("img");
                     userImage.src = user.imageurl;
                     userImage.style.width = "50px";
                     userImage.style.height = "50px";
                     usersPage.appendChild(userImage);
-    
+
                     //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
                     const logOutButton = document.createElement('button');
                     logOutButton.style.alignSelf = "center";
@@ -301,9 +293,9 @@ if (submitButton && usernameInput && passwordInput) {
                         //takes away the logged in page and back to the login page
                         messageInput.style.display = "none";
                         logInpage.innerHTML = "";
-    
+
                         logOutButton!.style.display = "none";
-    
+
                         userDeletedSuccessfully.textContent = " "
                         form!.style.display = "block";
                         // usernameInput!.value ="";
@@ -313,8 +305,8 @@ if (submitButton && usernameInput && passwordInput) {
                         loggedInUsersList!.style.display = "none";
                         window.location.reload();
                     }
-    
-    
+
+
                 });
             }
         }
@@ -333,6 +325,7 @@ if (submitButton && usernameInput && passwordInput) {
 
         // const logInpage = document.createElement('div');
         logInpage.innerHTML = `<h1>Welcome ${usernameInput.value}!</h1> `;
+        logInpage.style.textAlign = "center";
         document.body.appendChild(logInpage);
         logInpage.appendChild(loggedInUsersList!)
         loggedInUsersList!.style.display = "block";
@@ -381,6 +374,7 @@ if (submitButton && usernameInput && passwordInput) {
                 console.log("User deleted successfully");
                 userDeletedSuccessfully.textContent = "User deleted successfully!"
                 document.body.appendChild(userDeletedSuccessfully);
+
 
                 // Display logged-in users
                 displayLoggedInUsers(await getUsers());
@@ -463,134 +457,20 @@ if (submitButton && usernameInput && passwordInput) {
     console.error("One or more DOM elements not found.");
 }
 
-//----------------------------------EACH USER'S PAGE-------------------------------------//
-//function for displayin user page
-function displayUserPage(user: UserInfo): void {
-    document.body.innerHTML = "";
-    form!.style.display = "none";
-    const usersPage = document.createElement('div');
-    usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! </br> Status: ${user.status}</h1>`;
-    document.body.appendChild(usersPage);
+// //----------------------------------EACH USER'S PAGE-------------------------------------//
+// //function for displayin user page
+// function displayUserPage(user: UserInfo): void {
+//     document.body.innerHTML = "";
+//     form!.style.display = "none";
+//     const usersPage = document.createElement('div');
+//     usersPage.innerHTML = `<h1>Welcome to ${user.userName}'s page! </br> Status: ${user.status}</h1>`;
+//     document.body.appendChild(usersPage);
 
-    // Create an img element and set its src attribute to the user's image URL
-    const userImage = document.createElement("img");
-    userImage.src = user.imageurl;
-    userImage.style.width = "50px";
-    userImage.style.height = "50px";
-    usersPage.appendChild(userImage);
+//     // Create an img element and set its src attribute to the user's image URL
+//     const userImage = document.createElement("img");
+//     userImage.src = user.imageurl;
+//     userImage.style.width = "50px";
+//     userImage.style.height = "50px";
+//     usersPage.appendChild(userImage);
+// }
 
-    const backToLogInPageButton = document.createElement("button");
-    backToLogInPageButton.textContent = "Back to users status wall";
-    document.body.appendChild(backToLogInPageButton);
-    // Event listener for the button to get the user back to all users status wall
-    backToLogInPageButton.addEventListener("click", async (event) => {
-        event.preventDefault();
-        console.log("USER.USERNAME FRÅN BACKTOLOGIN", user.userName);
-        backToLogInPageButton.style.display = "none";
-        loggedInUsersList!.style.display = "block";
-        messageInput.style.display = "block";
-        messageInput.value = "";
-        accountCreated.textContent = " ";
-        // Remove error message if it exists
-        errorMessage.textContent = " ";
-
-        // //Log in div for when the user is logged in, all statusmessages shown here
-        const logInpage = document.createElement('div');
-        document.body.appendChild(logInpage);
-        messageInput.id = "status";
-        document.body.appendChild(messageInput);
-        messageInput.style.width = "100px";
-        logInpage.appendChild(loggedInUsersList!)
-
-        const sendMessageButton = document.createElement('button');
-        sendMessageButton.innerText = "Send statusmessage! "
-        sendMessageButton.style.width = "110px";
-        document.body.appendChild(sendMessageButton);
-        // usersPage.innerHTML = " ";
-        usersPage.innerHTML = `Logged-in user:${user.userName}</h1>`;
-
-
-        //event listener for button to send statusmessage
-        sendMessageButton.addEventListener("click", async () => {
-            const status = messageInput.value;
-            const url = `${baseUrl}users/${user.userName}/status.json`;
-            const init = {
-                method: "PUT",
-                body: JSON.stringify(status),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            };
-            try {
-                const response = await fetch(url, init);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
-                }
-
-                // Update the user.status with the new status
-                user.status = status;
-
-            } catch (err) {
-                console.log(err);
-                throw new Error("Failed to save user information.");
-            }
-            // Display logged-in users
-            displayLoggedInUsers(await getUsers());
-            messageInput.value = "";
-        });
-
-        //deletebutton for deleting the user from the current page
-        const deleteButton2 = document.createElement('button');
-        deleteButton2.innerText = "Delete User";
-        document.body.appendChild(deleteButton2);
-
-        deleteButton2?.addEventListener("click", async (event) => {
-            event?.preventDefault();
-            listItem.textContent = " ";
-            if (usernameInput) {
-                await deleteUser(usernameInput.value);
-                errorMessage.textContent = " ";
-            } else {
-                console.error("Username input element not found.");
-            }
-        });
-
-        async function deleteUser(username: string): Promise<void> {
-            console.log("Deleting user");
-            const url = `${baseUrl}users/${username}.json`;
-            const init = {
-                method: "DELETE",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                },
-            };
-
-            try {
-                const response = await fetch(url, init);
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
-                }
-                // Display logged-in users
-                displayLoggedInUsers(await getUsers());
-
-                //takes away the logged in page and back to the login page
-                messageInput.style.display = "none";
-                logInpage.innerHTML = "";
-                sendMessageButton.style.display = "none";
-                deleteButton2.style.display = "none";
-                userDeletedSuccessfully.textContent = " "
-                usersPage.innerHTML = " ";
-                console.log("User deleted successfully");
-                userDeletedSuccessfully.textContent = "User deleted successfully!"
-                document.body.appendChild(userDeletedSuccessfully);
-
-            } catch (err) {
-                console.log(err);
-                failedToDeleteUser.textContent = "Failed to delete user. Please try again.";
-                document.body.appendChild(failedToDeleteUser);
-                throw new Error("Failed to delete user.");
-            }
-        }
-    });
-}
