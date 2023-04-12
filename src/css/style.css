@@ -47,7 +47,8 @@ button {
   flex-direction: column;
   align-items: center;
   align-content: center;
-
+  text-align: center;
+  margin: 10px;
 }
 
 button:hover {
@@ -75,16 +76,20 @@ button:hover {
 
 #img {
   margin-right: 10px;
-  display: block; /* Add this line */
-  margin: 0 auto; /* Add this line */
+  display: block; 
+  margin: 0 auto; 
   display: flex;
   align-items: center;
-  justify-content: center; /* Add this line */
+  justify-content: center; 
 
   
 }
 
-
+#input{
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
 /* Error message styles */
 p {
   color: #f00;

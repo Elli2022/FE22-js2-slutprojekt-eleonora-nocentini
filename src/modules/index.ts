@@ -15,9 +15,13 @@ const body = document.getElementById('body') as HTMLBodyElement;
 const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
 let loggedInUser = null; // Declare loggedInUser variable
-// let loggedInUser: UserInfo | undefined;
 
 
+const container = document.createElement('div');
+container.style.display = "flex";
+container.style.justifyContent = "center";
+
+// Define the interfaces
 interface UserInfo {
     userName: any;
     password: string;
@@ -30,8 +34,10 @@ interface FirebaseResponse {
     [key: string]: UserInfo;
 }
 
+// Define the base URL
 const baseUrl = "https://social-media-68d76-default-rtdb.europe-west1.firebasedatabase.app/";
 
+//Define the function to get the users
 async function getUsers(): Promise<UserInfo[]> {
     try {
         const response = await fetch(`${baseUrl}users.json`);
@@ -56,7 +62,7 @@ async function getUsers(): Promise<UserInfo[]> {
 }
 
 
-//uppdate the users array
+//uppdate the users array - Define the function to save a user
 async function saveUser(user: UserInfo): Promise<void> {
 
     const arrData = await getUsers();
@@ -93,7 +99,6 @@ if (imageSelection) {
 } else {
     console.error("Image dropdown element not found.");
 }
-
 
 // Event listener for the "create account" button
 if (createAccountButton && usernameInput && passwordInput) {
@@ -174,10 +179,11 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
 
+         
+
 
             // Event listener to the list item
             listItem.addEventListener("click", () => {
-
                 document.body.innerHTML = "";
                 form!.style.display = "none";
                 const usersPage = document.createElement('div');
@@ -189,22 +195,23 @@ function displayLoggedInUsers(users: UserInfo[]): void {
                 userImage.src = user.imageurl;
                 userImage.style.width = "50px";
                 userImage.style.height = "50px";
+                userImage.style.alignItems = "center";
                 usersPage.appendChild(userImage);
 
                 //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
                 const logOutButton = document.createElement('button');
-                logOutButton.style.alignSelf = "center";
-                logOutButton.classList.add("logout-button");
+
                 logOutButton.textContent = "Log Out";
+                logOutButton.style.textAlign = "center";
+                logOutButton.style.margin = "10px";
+
                 document.body.appendChild(logOutButton);
                 logOutButton.addEventListener("click", backToMainPage);
                 function backToMainPage() {
                     //takes away the logged in page and back to the login page
                     messageInput.style.display = "none";
                     logInpage.innerHTML = "";
-
                     logOutButton!.style.display = "none";
-
                     userDeletedSuccessfully.textContent = " "
                     form!.style.display = "block";
                     // usernameInput!.value ="";
@@ -234,7 +241,6 @@ if (submitButton && usernameInput && passwordInput) {
         const users = await getUsers();
         const user = users.find((u) => u.userName === usernameInput.value);
         errorMessage.textContent = "Log In Successfull! ";
-        console.log("INPUTUSERNAME FRÅN SUBMIT", usernameInput.value)
 
 
         //if no user is found
@@ -333,12 +339,20 @@ if (submitButton && usernameInput && passwordInput) {
         messageInput.style.width = "100px";
         const sendMessageButton = document.createElement('button');
         sendMessageButton.innerText = "Send statusmessage! "
-        sendMessageButton.style.width = "110px";
-        document.body.appendChild(sendMessageButton);
+        sendMessageButton.style.width = "120px";
+        sendMessageButton.style.textAlign = "center";
+        sendMessageButton.style.margin = "10px";
+        container.appendChild(sendMessageButton);
+        document.body.appendChild(container);;
 
         const deleteButton2 = document.createElement('button');
         deleteButton2.innerText = "Delete User";
-        document.body.appendChild(deleteButton2);
+        deleteButton2.style.textAlign = "center";
+        deleteButton2.style.margin = "10px";
+        deleteButton2.style.width = "120px";
+        container.appendChild(deleteButton2);
+        document.body.appendChild(container);
+
 
 
         deleteButton2?.addEventListener("click", async (event) => {
@@ -430,7 +444,11 @@ if (submitButton && usernameInput && passwordInput) {
         //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
         const logOutButton = document.createElement('button');
         logOutButton.textContent = "Log Out";
-        document.body.appendChild(logOutButton);
+        logOutButton.style.textAlign = "center";
+        logOutButton.style.margin = "10px";
+        logOutButton.style.width = "80px";
+        container.appendChild(logOutButton);
+        document.body.appendChild(container);
         logOutButton.addEventListener("click", backToMainPage);
         function backToMainPage() {
             //takes away the logged in page and back to the login page
