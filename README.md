@@ -1,10 +1,10 @@
 # FE22-js2-slutprojekt-eleonora-nocentini
 
-#Simple Social Media Page using Firebase
+# Simple Social Media Page using Firebase
 This is a basic social media page that allows users to sign in, create a new user, write status updates, visit other people's profiles, and delete their own account. The project uses Firebase to store user information, including their usernames, passwords, and status updates.
 
-##Requirements
-###The website
+## Requirements
+### The website
 *Sign in: users can log in with a username and associated password, which is checked against the firebase database. Note that this is not secure.
 *Create User: users can create a new account, which includes a username, password, and a profile picture chosen from three default images.
 *Logged in User: once logged in, the user can see their own status updates, add new status updates, visit other users' pages, and delete their own account.
