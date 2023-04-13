@@ -49,8 +49,6 @@ async function getUsers(): Promise<UserInfo[]> {
 
             return [];
         }
-
-
         const usersArray: UserInfo[] = Object.values(users);
         return usersArray;
     } catch (err) {
@@ -71,7 +69,6 @@ async function saveUser(user: UserInfo): Promise<void> {
             "Content-type": "application/json; charset=UTF-8",
         },
     };
-
     try {
         const response = await fetch(url, init);
 
@@ -85,11 +82,17 @@ async function saveUser(user: UserInfo): Promise<void> {
 }
 
 
-//Event listener for the "image dropdown"
+// Helper function to add error messages
+function displayErrorMessage(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.color = "red";
+    createAccountButton.insertAdjacentElement("afterend", errorMessage);
+}
+
+// Event listener for the "image dropdown"
 if (imageSelection) {
     imageSelection.addEventListener("change", () => {
-        const selectedImageUrl = imageSelection.value;
-        imageSelection.value = selectedImageUrl;
+        imageSelection.value = imageSelection.value;
     });
 } else {
     console.error("Image dropdown element not found.");
@@ -103,32 +106,23 @@ if (createAccountButton && usernameInput && passwordInput) {
         const userName = usernameInput.value;
         const password = passwordInput.value;
 
-
-
         if (!userName || !password) {
-            errorMessage.textContent = "Username and / or password cannot be empty.";
-            errorMessage.style.color = "red";
-            createAccountButton.insertAdjacentElement("afterend", errorMessage);
+            displayErrorMessage("Username and / or password cannot be empty.");
             return;
         }
 
-        //check if username is available
+        // Check if username is available
         const isAvailable = await isUsernameAvailable(userName);
 
-
         if (!isAvailable) {
-            errorMessage.textContent = "Username is already taken. Please choose another one.";
-            errorMessage.style.color = "red";
-            createAccountButton.insertAdjacentElement("afterend", errorMessage);
+            displayErrorMessage("Username is already taken. Please choose another one.");
             return;
         }
 
         body.appendChild(accountCreated);
         accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
 
-
-
-        const userInfo: UserInfo = {
+        const userInfo = {
             userName: userName,
             password: password,
             status: "",
@@ -174,7 +168,7 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             listItem.appendChild(userImage);
             loggedInUsersList.appendChild(listItem);
 
-         
+
 
 
             // Event listener to the list item
@@ -280,6 +274,7 @@ if (submitButton && usernameInput && passwordInput) {
                     userImage.src = user.imageurl;
                     userImage.style.width = "50px";
                     userImage.style.height = "50px";
+                    userImage.style.alignItems = "center";
                     usersPage.appendChild(userImage);
 
                     //Log out button to log out user and take user back to login page with username input and password input but with the user still registred in the database
@@ -327,11 +322,26 @@ if (submitButton && usernameInput && passwordInput) {
         document.body.appendChild(logInpage);
         logInpage.appendChild(loggedInUsersList!)
         loggedInUsersList!.style.display = "block";
+
         messageInput.style.display = "block";
         messageInput.value = "";
         messageInput.id = "status";
         document.body.appendChild(messageInput);
         messageInput.style.width = "100px";
+        messageInput.style.position = "fixed";
+
+        // Center horizontally
+        messageInput.style.marginLeft = "auto";
+        messageInput.style.marginRight = "auto";
+
+        // Position at the bottom of the screen
+        messageInput.style.position = "fixed";
+        messageInput.style.bottom = "20px";
+
+        // Center horizontally and add a small gap from the button
+        messageInput.style.left = "50%";
+        messageInput.style.transform = "translateX(-50%)";
+
         const sendMessageButton = document.createElement('button');
         sendMessageButton.innerText = "Send statusmessage! "
         sendMessageButton.style.width = "120px";
@@ -347,8 +357,6 @@ if (submitButton && usernameInput && passwordInput) {
         deleteButton2.style.width = "120px";
         container.appendChild(deleteButton2);
         document.body.appendChild(container);
-
-
 
         deleteButton2?.addEventListener("click", async (event) => {
             event?.preventDefault();
