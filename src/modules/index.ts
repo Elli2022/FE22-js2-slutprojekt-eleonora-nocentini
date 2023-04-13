@@ -16,7 +16,6 @@ const accountCreated = document.createElement("h1");
 const logInpage = document.createElement('div');
 let loggedInUser = null; // Declare loggedInUser variable
 
-
 const container = document.createElement('div');
 container.style.display = "flex";
 container.style.justifyContent = "center";
