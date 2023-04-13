@@ -49,6 +49,8 @@ async function getUsers(): Promise<UserInfo[]> {
 
             return [];
         }
+
+
         const usersArray: UserInfo[] = Object.values(users);
         return usersArray;
     } catch (err) {
@@ -69,6 +71,7 @@ async function saveUser(user: UserInfo): Promise<void> {
             "Content-type": "application/json; charset=UTF-8",
         },
     };
+
     try {
         const response = await fetch(url, init);
 
@@ -82,17 +85,11 @@ async function saveUser(user: UserInfo): Promise<void> {
 }
 
 
-// Helper function to add error messages
-function displayErrorMessage(message) {
-    errorMessage.textContent = message;
-    errorMessage.style.color = "red";
-    createAccountButton.insertAdjacentElement("afterend", errorMessage);
-}
-
-// Event listener for the "image dropdown"
+//Event listener for the "image dropdown"
 if (imageSelection) {
     imageSelection.addEventListener("change", () => {
-        imageSelection.value = imageSelection.value;
+        const selectedImageUrl = imageSelection.value;
+        imageSelection.value = selectedImageUrl;
     });
 } else {
     console.error("Image dropdown element not found.");
@@ -107,22 +104,27 @@ if (createAccountButton && usernameInput && passwordInput) {
         const password = passwordInput.value;
 
         if (!userName || !password) {
-            displayErrorMessage("Username and / or password cannot be empty.");
+            errorMessage.textContent = "Username and / or password cannot be empty.";
+            errorMessage.style.color = "red";
+            createAccountButton.insertAdjacentElement("afterend", errorMessage);
             return;
         }
 
-        // Check if username is available
+        //check if username is available
         const isAvailable = await isUsernameAvailable(userName);
 
+
         if (!isAvailable) {
-            displayErrorMessage("Username is already taken. Please choose another one.");
+            errorMessage.textContent = "Username is already taken. Please choose another one.";
+            errorMessage.style.color = "red";
+            createAccountButton.insertAdjacentElement("afterend", errorMessage);
             return;
         }
 
         body.appendChild(accountCreated);
         accountCreated.textContent = "Your account has been successfully created! You may now log in with your new account.";
 
-        const userInfo = {
+        const userInfo: UserInfo = {
             userName: userName,
             password: password,
             status: "",
@@ -169,8 +171,6 @@ function displayLoggedInUsers(users: UserInfo[]): void {
             loggedInUsersList.appendChild(listItem);
 
 
-
-
             // Event listener to the list item
             listItem.addEventListener("click", () => {
                 document.body.innerHTML = "";
@@ -210,13 +210,10 @@ function displayLoggedInUsers(users: UserInfo[]): void {
                     loggedInUsersList!.style.display = "none";
                     window.location.reload();
                 }
-
-
             });
         }
     }
 }
-
 // Event listener for the "submit" button
 if (submitButton && usernameInput && passwordInput) {
     submitButton.addEventListener("click", async (event: MouseEvent) => {
@@ -282,23 +279,7 @@ if (submitButton && usernameInput && passwordInput) {
                     logOutButton.textContent = "Log Out";
                     document.body.appendChild(logOutButton);
                     logOutButton.addEventListener("click", backToMainPage);
-                    function backToMainPage() {
-                        //takes away the logged in page and back to the login page
-                        messageInput.style.display = "none";
-                        logInpage.innerHTML = "";
-
-                        logOutButton!.style.display = "none";
-
-                        userDeletedSuccessfully.textContent = " "
-                        form!.style.display = "block";
-                        // usernameInput!.value ="";
-                        passwordInput!.value = "";
-                        errorMessage.textContent = " ";
-                        logInpage!.style.display = "none";
-                        loggedInUsersList!.style.display = "none";
-                        window.location.reload();
-                    }
-
+                   backToMainPage();
 
                 });
             }
@@ -327,16 +308,13 @@ if (submitButton && usernameInput && passwordInput) {
         messageInput.value = "";
         messageInput.id = "status";
         document.body.appendChild(messageInput);
-        messageInput.style.width = "100px";
-        messageInput.style.position = "fixed";
+        messageInput.style.width = "200px";
+        // messageInput.style.position = "fixed";
 
-        // Center horizontally
-        messageInput.style.marginLeft = "auto";
-        messageInput.style.marginRight = "auto";
 
         // Position at the bottom of the screen
-        messageInput.style.position = "fixed";
-        messageInput.style.bottom = "20px";
+        messageInput.style.position = "relative";
+        messageInput.style.bottom = "10px";
 
         // Center horizontally and add a small gap from the button
         messageInput.style.left = "50%";
@@ -360,7 +338,23 @@ if (submitButton && usernameInput && passwordInput) {
 
         deleteButton2?.addEventListener("click", async (event) => {
             event?.preventDefault();
-            listItem.textContent = " ";
+            //takes away the logged in page and back to the login page
+            function backToMainPage() {
+                //takes away the logged in page and back to the login page
+                messageInput.style.display = "none";
+                logInpage.innerHTML = "";
+                logOutButton!.style.display = "none";
+                userDeletedSuccessfully.textContent = " "
+                form!.style.display = "block";
+                // usernameInput!.value ="";
+                passwordInput!.value = "";
+                errorMessage.textContent = " ";
+                logInpage!.style.display = "none";
+                loggedInUsersList!.style.display = "none";
+                window.location.reload();
+            }
+            backToMainPage();
+
             if (usernameInput) {
                 await deleteUser(usernameInput.value);
                 errorMessage.textContent = " ";
@@ -378,7 +372,6 @@ if (submitButton && usernameInput && passwordInput) {
                     "Content-type": "application/json; charset=UTF-8",
                 },
             };
-
             try {
                 const response = await fetch(url, init);
 
@@ -393,19 +386,7 @@ if (submitButton && usernameInput && passwordInput) {
                 // Display logged-in users
                 displayLoggedInUsers(await getUsers());
 
-                //takes away the logged in page and back to the login page
-                messageInput.style.display = "none";
-                logInpage.innerHTML = "";
-                sendMessageButton.style.display = "none";
-                logOutButton!.style.display = "none";
-                deleteButton2!.style.display = "none";
-                userDeletedSuccessfully.textContent = " "
-                form!.style.display = "block";
-                // usernameInput!.value ="";
-                passwordInput!.value = "";
-                errorMessage.textContent = " ";
-                logInpage!.style.display = "none";
-                loggedInUsersList!.style.display = "none";
+
 
             } catch (err) {
                 console.log(err);
@@ -414,7 +395,6 @@ if (submitButton && usernameInput && passwordInput) {
                 throw new Error("Failed to delete user.");
             }
         }
-
 
         //event listener for button to send statusmessage
         sendMessageButton.addEventListener("click", async () => {
@@ -469,7 +449,6 @@ if (submitButton && usernameInput && passwordInput) {
             loggedInUsersList!.style.display = "none";
             window.location.reload();
         }
-
     });
 } else {
     console.error("One or more DOM elements not found.");
