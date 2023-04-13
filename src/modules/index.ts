@@ -52,11 +52,8 @@ async function getUsers(): Promise<UserInfo[]> {
 
 
         const usersArray: UserInfo[] = Object.values(users);
-
         return usersArray;
-
     } catch (err) {
-
         throw new Error("Failed to fetch users");
     }
 }
@@ -66,8 +63,6 @@ async function getUsers(): Promise<UserInfo[]> {
 async function saveUser(user: UserInfo): Promise<void> {
 
     const arrData = await getUsers();
-    ;
-
     const url = `${baseUrl}users/${user.userName}.json`;
     const init = {
         method: "PUT",
