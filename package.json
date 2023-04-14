@@ -1,7 +1,6 @@
 {
   "name": "fe22-js2-slutprojekt-eleonora-nocentini",
   "version": "1.0.0",
-  "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./src/index.html",
@@ -18,5 +17,10 @@
   },
   "dependencies": {
     "node": "^19.8.1"
-  }
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "description": ""
 }
